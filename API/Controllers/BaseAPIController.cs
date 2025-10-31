@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using MediatR;
 
 namespace API.Controllers
 {
@@ -7,6 +8,10 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class BaseAPIController : ControllerBase
     {
+
+        private IMediator? _mediator;
+        protected IMediator Mediator => _mediator ??= HttpContext?.RequestServices?.GetService<IMediator>() ?? throw new InvalidOperationException("IMediator service is not available.");
+
         protected ActionResult CustomResponse(object result = null, string message = null, int statusCode = StatusCodes.Status200OK)
         {
             var response = new

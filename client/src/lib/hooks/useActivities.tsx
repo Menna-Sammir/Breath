@@ -1,0 +1,65 @@
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import agent from "../api/agent";
+import { useLocation } from "react-router";
+
+export const useActivities = (id?: string) => {
+  const QueryClient = useQueryClient();
+  const location = useLocation();
+
+  const { data: activities, isPending } = useQuery({
+    queryKey: ["activities"],
+    queryFn: async () => {
+      const response = await agent.get<Activity[]>("/activities");
+      return response.data?.data;
+    },
+    enabled: !id && location.pathname === "/activities",
+  });
+
+  const { data: activity, isLoading: isLoadingActivity } = useQuery({
+    queryKey: ["activity", id],
+    queryFn: async () => {
+      const response = await agent.get<Activity>(`/activities/${id}`);
+      return response.data?.data;
+    },
+    enabled: !!id,
+  });
+
+  const updateActivity = useMutation({
+    mutationFn: async (activity: Activity) => {
+      // await agent.put<Activity>("/activities", activity);
+      await agent.put<Activity>(`/activities/${activity.id}`, activity);
+    },
+    onSuccess: async () => {
+      await QueryClient.invalidateQueries({ queryKey: ["activities"] });
+    },
+  });
+
+  const createdActivity = useMutation({
+    mutationFn: async (activity: Activity) => {
+      const response = await agent.post<Activity>("/activities", activity);
+      return response.data?.data;
+    },
+    onSuccess: async () => {
+      await QueryClient.invalidateQueries({ queryKey: ["activities"] });
+    },
+  });
+
+  const deleteActivity = useMutation({
+    mutationFn: async (id: string) => {
+      await agent.delete(`/activities/${id}`);
+    },
+    onSuccess: async () => {
+      await QueryClient.invalidateQueries({ queryKey: ["activities"] });
+    },
+  });
+
+  return {
+    activities,
+    isPending,
+    updateActivity,
+    createdActivity,
+    deleteActivity,
+    activity,
+    isLoadingActivity,
+  };
+};
