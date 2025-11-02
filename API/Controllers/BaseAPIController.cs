@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using MediatR;
+using Application.Core;
 
 namespace API.Controllers
 {
@@ -12,16 +13,22 @@ namespace API.Controllers
         private IMediator? _mediator;
         protected IMediator Mediator => _mediator ??= HttpContext?.RequestServices?.GetService<IMediator>() ?? throw new InvalidOperationException("IMediator service is not available.");
 
-        protected ActionResult CustomResponse(object result = null, string message = null, int statusCode = StatusCodes.Status200OK)
+        protected ActionResult HandlerResult<T>(Result<T> result)
         {
-            var response = new
+            if (result == null || (!result.IsSuccess && result.StatusCode == 404))
             {
-                Success = statusCode >= 200 && statusCode < 300,
-                Message = message,
-                Data = result
-            };
+                return NotFound();
+            }
 
-            return StatusCode(statusCode, response);
+            if (result.IsSuccess && result.Value is not null)
+            {
+                return Ok(result.Value);
+            }
+
+
+            return BadRequest(result.Error);
         }
+
+
     }
 }

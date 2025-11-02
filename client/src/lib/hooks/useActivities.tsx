@@ -10,7 +10,7 @@ export const useActivities = (id?: string) => {
     queryKey: ["activities"],
     queryFn: async () => {
       const response = await agent.get<Activity[]>("/activities");
-      return response.data?.data;
+      return response.data;
     },
     enabled: !id && location.pathname === "/activities",
   });
@@ -19,7 +19,7 @@ export const useActivities = (id?: string) => {
     queryKey: ["activity", id],
     queryFn: async () => {
       const response = await agent.get<Activity>(`/activities/${id}`);
-      return response.data?.data;
+      return response.data;
     },
     enabled: !!id,
   });
@@ -37,7 +37,7 @@ export const useActivities = (id?: string) => {
   const createdActivity = useMutation({
     mutationFn: async (activity: Activity) => {
       const response = await agent.post<Activity>("/activities", activity);
-      return response.data?.data;
+      return response.data;
     },
     onSuccess: async () => {
       await QueryClient.invalidateQueries({ queryKey: ["activities"] });

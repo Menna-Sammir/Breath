@@ -19,20 +19,7 @@ namespace Application.Activities.Queries
 
       public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
       {
-        // try
-        // {
-        //   for (var i = 0; i < 10; i++)
-        //   {
-        //     cancellationToken.ThrowIfCancellationRequested();
-        //     await Task.Delay(1000, cancellationToken);
-        //     logger.LogInformation($"Task {i} - Delay {1000}ms");
-        //   }
-
-        // }
-        // catch (Exception ex)
-        // {
-        //   logger.LogError(ex, "Task was cancelled");
-        // }
+        logger.LogInformation("Fetching activity list");
         return await context.Activities.ToListAsync(cancellationToken);
       }
     }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Domain;
+using Application.Activities.DTOs;
 
 namespace Application.Core
 {
@@ -12,7 +13,9 @@ namespace Application.Core
     public MappingProfiles()
     {
       CreateMap<Activity, Activity>();
-      
+      CreateMap<CreateActivityDto, Activity>();
+      CreateMap<EditActivityDto, Activity>();
+
     }
   }
 }

@@ -1,9 +1,8 @@
-using System;
-using Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Domain;
 using Application.Activities.Queries;
-using MediatR;
+using Application.Activities.DTOs;
+using Application.Activities.Commands;
 
 namespace API.Controllers
 {
@@ -13,8 +12,8 @@ namespace API.Controllers
 		[HttpGet]
 		public async Task<ActionResult<List<Activity>>> GetActivities()
 		{
-			var getActivites = await Mediator.Send(new GetActivityList.Query());
-			return CustomResponse(getActivites);
+			var getActivities = await Mediator.Send(new GetActivityList.Query());
+			return getActivities;
 
 		}
 
@@ -22,30 +21,32 @@ namespace API.Controllers
 		public async Task<ActionResult<Activity>> GetActivity(Guid id)
 		{
 			var activity = await Mediator.Send(new GetActivityDetails.Query { Id = id });
-			return CustomResponse(activity);
+
+			return HandlerResult(activity);
+
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Guid>> CreateActivity(Activity activity)
+		public async Task<ActionResult> CreateActivity(CreateActivityDto ActivityDto)
 		{
-			var id = await Mediator.Send(new Application.Activities.Commands.CreateActivities.Command { Activity = activity });
-			return CustomResponse(id);
+			var id = await Mediator.Send(new CreateActivities.Command { ActivityDto = ActivityDto });
+			return HandlerResult(id);
 		}
 
 		[HttpPut("{id}")]
-		public async Task<ActionResult<Guid>> EditActivity([FromRoute] Guid id, [FromBody] Activity activity)
+		public async Task<ActionResult> EditActivity([FromRoute] Guid id, [FromBody] EditActivityDto activity)
 		{
 			activity.Id = id;
-			var updatedId = await Mediator.Send(new Application.Activities.Commands.EditActivity.Command { Activity = activity });
-			return CustomResponse(updatedId);
+			var updatedId = await Mediator.Send(new EditActivity.Command { ActivityDto = activity });
+			return HandlerResult(updatedId);
 		}
-	
+
 
 		[HttpDelete("{id}")]
-		public async Task<ActionResult<Guid>> DeleteActivity(Guid id)
+		public async Task<ActionResult> DeleteActivity(Guid id)
 		{
-			var deletedId = await Mediator.Send(new Application.Activities.Commands.DeleteActivities.Command { Id = id });
-			return CustomResponse(deletedId);
+			var deletedId = await Mediator.Send(new DeleteActivities.Command { Id = id });
+			return HandlerResult(deletedId);
 		}
 	}
 }

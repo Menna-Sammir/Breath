@@ -1,5 +1,7 @@
 import axios from "axios";
 import { store } from "../stores/store";
+import { toast } from "react-toastify";
+import { router } from "../../app/router/Routes";
 
 export const agent = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001/api",
@@ -16,19 +18,51 @@ agent.interceptors.request.use((config) => {
   return config;
 });
 
-agent.interceptors.response.use(async (response) => {
-  try {
+agent.interceptors.response.use(
+  async (response) => {
     await sleep(1000);
     store.uiStore.isIdle();
     return response;
-  } catch (error) {
-    console.error("Error occurred while sleeping:", error);
-    // Re-throw so the interceptor returns a rejected promise instead of undefined
-    throw error;
-  } finally {
-    store.uiStore.isIdle();
+  },
+  async (error) => {
+    await store.uiStore.isIdle();
+    const { status, data } = error.response;
+
+    switch (status) {
+      case 400:
+        if (data.errors) {
+          const modelStateErrors = [];
+          for (const key in data.errors) {
+            if (data.errors[key]) {
+              modelStateErrors.push(data.errors[key]);
+            }
+          }
+          throw modelStateErrors.flat();
+        } else {
+          toast.error(data.title);
+        }
+        break;
+      case 401:
+        toast.error("Unauthorized - Please log in");
+        break;
+      case 403:
+        toast.error(
+          "Forbidden - You don't have permission to access this resource"
+        );
+        break;
+      case 404:
+        router.navigate("/not-found");
+        break;
+      case 500:
+        router.navigate("/server-error", { state: { error: data } });
+        break;
+      default:
+        toast.error("An unexpected error occurred");
+        break;
+    }
+    return Promise.reject(error);
   }
-});
+);
 
 // agent.interceptors.response.use(
 //   (response) => response,
