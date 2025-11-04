@@ -7,6 +7,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { Link } from "react-router";
+import type { Activity } from "../../../lib/Types";
 
 type Props = {
   activity: Activity;

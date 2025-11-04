@@ -1,11 +1,15 @@
 import { Card, Badge, CardMedia, Box, Typography, Button } from "@mui/material";
 import { Link } from "react-router";
+import { formatDate } from "../../../lib/util/util";
+import type { Activity } from "../../../lib/Types";
 
 type Props = {
   activity: Activity;
 };
 
 export default function ActivityDetailsHeader({ activity }: Props) {
+  if (!activity) return null;
+
   const isCancelled = false;
   const isHost = true;
   const isGoing = true;
@@ -54,7 +58,9 @@ export default function ActivityDetailsHeader({ activity }: Props) {
           <Typography variant="h4" sx={{ fontWeight: "bold" }}>
             {activity.title}
           </Typography>
-          <Typography variant="subtitle1">{activity.date}</Typography>
+          <Typography variant="subtitle1">
+            {formatDate(activity?.date) ?? <span>No Date Provided</span>}
+          </Typography>
           <Typography variant="subtitle2">
             Hosted by{" "}
             <Link
@@ -81,7 +87,7 @@ export default function ActivityDetailsHeader({ activity }: Props) {
                 variant="contained"
                 color="primary"
                 component={Link}
-                to={`/manage/activityId`}
+                to={`/manage/${activity.id}`}
                 disabled={isCancelled}
               >
                 Manage Event
