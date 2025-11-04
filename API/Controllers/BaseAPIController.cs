@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using MediatR;
 using Application.Core;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -9,9 +9,11 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class BaseAPIController : ControllerBase
     {
-
         private IMediator? _mediator;
-        protected IMediator Mediator => _mediator ??= HttpContext?.RequestServices?.GetService<IMediator>() ?? throw new InvalidOperationException("IMediator service is not available.");
+        protected IMediator Mediator =>
+            _mediator ??=
+                HttpContext?.RequestServices?.GetService<IMediator>()
+                ?? throw new InvalidOperationException("IMediator service is not available.");
 
         protected ActionResult HandlerResult<T>(Result<T> result)
         {
@@ -25,10 +27,7 @@ namespace API.Controllers
                 return Ok(result.Value);
             }
 
-
             return BadRequest(result.Error);
         }
-
-
     }
 }

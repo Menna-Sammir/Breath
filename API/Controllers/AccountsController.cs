@@ -1,0 +1,61 @@
+using API.DTOs;
+using Domain;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+
+namespace API.Controllers;
+
+public class AccountsController(SignInManager<User> signInManager) : BaseAPIController
+{
+    [HttpPost("register")]
+    public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
+    {
+        var user = new User
+        {
+            UserName = registerDto.Email,
+            Email = registerDto.Email,
+            DisplayName = registerDto.DisplayName,
+        };
+
+        var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
+
+        if (result.Succeeded)
+            return Ok();
+
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError("registerError", error.Description);
+        }
+        return ValidationProblem();
+    }
+
+    [AllowAnonymous]
+    [HttpGet("user-info")]
+    public async Task<ActionResult> GetUserInfo()
+    {
+        if (User?.Identity == null || !User.Identity.IsAuthenticated)
+            return NoContent();
+        var user = await signInManager.UserManager.GetUserAsync(User);
+        if (user == null)
+            return Unauthorized();
+
+        return Ok(
+            new
+            {
+                user.Email,
+                user.DisplayName,
+                user.Id,
+                user.ImageUrl,
+            }
+        );
+    }
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout()
+    {
+        await signInManager.SignOutAsync();
+        return Ok();
+    }
+}
