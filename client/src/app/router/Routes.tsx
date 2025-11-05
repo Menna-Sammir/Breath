@@ -4,10 +4,12 @@ import HomePage from "../../features/activities/home/homepage";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetailPage from "../../features/activities/details/ActivityDetailPage";
-import Counter from "../../features/counter/Counter";
 import TestErrors from "../../features/errors/TestErrors";
 import NotFound from "../../features/errors/NotFound";
 import ServerError from "../../features/errors/ServerError";
+import LoginForm from "../../features/account/LoginForm";
+import RequiredAuth from "./RequiredAuth";
+import RegisterForm from "../../features/account/RegisterForm";
 
 export const router = createBrowserRouter([
   {
@@ -19,24 +21,25 @@ export const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "activities",
-        element: <ActivityDashboard />,
-      },
-      {
-        path: "activities/:id",
-        element: <ActivityDetailPage />,
-      },
-      {
-        path: "manage/:id",
-        element: <ActivityForm key="edit" />,
-      },
-      {
-        path: "createActivity",
-        element: <ActivityForm key="create" />,
-      },
-      {
-        path: "counter",
-        element: <Counter />,
+        element: <RequiredAuth />,
+        children: [
+          {
+            path: "activities",
+            element: <ActivityDashboard />,
+          },
+          {
+            path: "activities/:id",
+            element: <ActivityDetailPage />,
+          },
+          {
+            path: "manage/:id",
+            element: <ActivityForm key="edit" />,
+          },
+          {
+            path: "createActivity",
+            element: <ActivityForm key="create" />,
+          },
+        ],
       },
       {
         path: "errorTest",
@@ -49,6 +52,14 @@ export const router = createBrowserRouter([
       {
         path: "server-error",
         element: <ServerError />,
+      },
+      {
+        path: "login",
+        element: <LoginForm />,
+      },
+      {
+        path: "register",
+        element: <RegisterForm />,
       },
       {
         path: "*",

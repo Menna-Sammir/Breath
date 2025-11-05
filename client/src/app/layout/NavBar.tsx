@@ -16,12 +16,15 @@ import MenuItemLink from "../shared/components/MenuItemLink";
 import { useStore } from "../../lib/stores/store";
 import { Observer } from "mobx-react-lite";
 import LinearProgress from "@mui/material/LinearProgress";
+import { useAccount } from "../../lib/hooks/useAccounts";
+import UserMenu from "./UserMenu";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 export default function NavBar() {
   const { uiStore } = useStore();
+  const { currentUser } = useAccount();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
@@ -148,14 +151,17 @@ export default function NavBar() {
               <Typography sx={{ textAlign: "center" }}>Activity</Typography>
             </MenuItemLink>
 
-            <MenuItemLink to="/createActivity">
-              <Typography sx={{ textAlign: "center" }}>
-                create Activity
-              </Typography>
-            </MenuItemLink>
-
             <MenuItemLink to="/counter">
-              <Typography sx={{ textAlign: "center" }}>Counter</Typography>
+              <Typography sx={{ textAlign: "center" }}>
+                {currentUser ? (
+                  <UserMenu />
+                ) : (
+                  <>
+                    <MenuItemLink to="/login">Login</MenuItemLink>
+                    <MenuItemLink to="/register">Register</MenuItemLink>
+                  </>
+                )}
+              </Typography>
             </MenuItemLink>
           </Box>
           <Box sx={{ flexGrow: 0 }}>

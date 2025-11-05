@@ -5,6 +5,7 @@ import { router } from "../../app/router/Routes";
 
 export const agent = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5001/api",
+  withCredentials: true,
 });
 
 const sleep = (delay: number) => {

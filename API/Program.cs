@@ -57,12 +57,7 @@ app.UseCors(x =>
     x.AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()
-        .WithOrigins(
-            "http://localhost:3000",
-            "https://localhost:3000",
-            "http://localhost:5173",
-            "https://localhost:5173"
-        )
+        .WithOrigins("http://localhost:3000", "https://localhost:3000")
 );
 
 // Configure the HTTP request pipeline.
@@ -78,7 +73,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGroup("/api").MapIdentityApi<User>();
+app.MapGroup("api").MapIdentityApi<User>();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

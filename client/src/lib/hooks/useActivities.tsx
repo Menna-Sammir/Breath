@@ -1,19 +1,21 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import agent from "../api/agent";
 import { useLocation } from "react-router";
-import type { Activity } from "../Types";
+import { useAccount } from "./useAccounts";
 
 export const useActivities = (id?: string) => {
-  const QueryClient = useQueryClient();
+  const queryClient = useQueryClient();
+  const { currentUser } = useAccount();
+
   const location = useLocation();
 
-  const { data: activities, isPending } = useQuery({
+  const { data: activities, isPending, isLoading } = useQuery({
     queryKey: ["activities"],
     queryFn: async () => {
       const response = await agent.get<Activity[]>("/activities");
       return response.data;
     },
-    enabled: !id && location.pathname === "/activities",
+    enabled: !id && location.pathname === "/activities" && !!currentUser,
   });
 
   const { data: activity, isLoading: isLoadingActivity } = useQuery({
@@ -22,7 +24,7 @@ export const useActivities = (id?: string) => {
       const response = await agent.get<Activity>(`/activities/${id}`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !!currentUser,
   });
 
   const updateActivity = useMutation({
@@ -31,7 +33,7 @@ export const useActivities = (id?: string) => {
       await agent.put<Activity>(`/activities/${activity.id}`, activity);
     },
     onSuccess: async () => {
-      await QueryClient.invalidateQueries({ queryKey: ["activities"] });
+      await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
   });
 
@@ -41,7 +43,7 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     onSuccess: async () => {
-      await QueryClient.invalidateQueries({ queryKey: ["activities"] });
+      await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
   });
 
@@ -50,13 +52,13 @@ export const useActivities = (id?: string) => {
       await agent.delete(`/activities/${id}`);
     },
     onSuccess: async () => {
-      await QueryClient.invalidateQueries({ queryKey: ["activities"] });
+      await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
   });
 
   return {
     activities,
-    isPending,
+    isLoading,
     updateActivity,
     createdActivity,
     deleteActivity,

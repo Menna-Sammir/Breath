@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AccountsController(SignInManager<User> signInManager) : BaseAPIController
+public class AccountController(SignInManager<User> signInManager) : BaseAPIController
 {
+    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
     {
