@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router";
+import { Outlet, ScrollRestoration, useLocation } from "react-router";
 import "./App.css";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Container } from "@mui/material";
@@ -10,6 +10,7 @@ function App() {
   const location = useLocation();
   return (
     <Box sx={{ bgcolor: "#eeeeee", minHeight: "100vh" }}>
+      <ScrollRestoration />
       <CssBaseline />
       {location.pathname === "/" ? (
         <HomePage />

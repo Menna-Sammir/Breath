@@ -12,14 +12,14 @@ import {
 } from "@mui/material";
 import { Link } from "react-router";
 import { formatDate } from "../../../lib/util/util";
+import AvatarPopover from "../../../app/shared/components/AvatarPopover";
 
 type Props = {
   activity: Activity;
 };
 
 export default function ActivityCard({ activity }: Props) {
-  const isHost = false;
-  const isGoing = false;
+  const { isHost, isGoing } = activity;
   const label = isHost
     ? "You are hosting this activity"
     : isGoing
@@ -42,7 +42,10 @@ export default function ActivityCard({ activity }: Props) {
           titleTypographyProps={{ fontWeight: "bold", fontSize: 20 }}
           subheader={
             <>
-              Hosted by <Link to={`/profiles/bob`}>Bob</Link>
+              Hosted by{" "}
+              <Link to={`/profiles/${activity.hostId}`}>
+                {activity.hostDisplayName}
+              </Link>
             </>
           }
         ></CardHeader>
@@ -52,6 +55,7 @@ export default function ActivityCard({ activity }: Props) {
             <Chip
               label={label}
               color={color}
+              variant="outlined"
               sx={{ fontSize: 16, fontWeight: "bold", mt: isCancelled ? 1 : 0 }}
             />
           )}
@@ -80,7 +84,9 @@ export default function ActivityCard({ activity }: Props) {
           gap={2}
           sx={{ backgroundColor: "lightgray", p: 1, borderRadius: 2, my: 2 }}
         >
-          Attendees will go here
+          {activity.attendees.map((attendee) => (
+            <AvatarPopover key={attendee.id} profile={attendee} />
+          ))}
         </Box>
       </CardContent>
 
