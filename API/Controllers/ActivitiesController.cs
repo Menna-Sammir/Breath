@@ -2,6 +2,7 @@ using Application.Activities.Commands;
 using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -10,7 +11,7 @@ namespace API.Controllers
     public class ActivitiesController : BaseAPIController
     {
         [HttpGet]
-        public async Task<ActionResult<List<Activity>>> GetActivities()
+        public async Task<ActionResult<List<ActivityDto>>> GetActivities()
         {
             var getActivities = await Mediator.Send(new GetActivityList.Query());
             return getActivities;
@@ -34,6 +35,7 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult> EditActivity(
             [FromRoute] Guid id,
             [FromBody] EditActivityDto activity
@@ -47,10 +49,19 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult> DeleteActivity(Guid id)
         {
             var deletedId = await Mediator.Send(new DeleteActivities.Command { Id = id });
             return HandlerResult(deletedId);
+        }
+
+        [HttpPost("{id}/attend")]
+        public async Task<ActionResult> Attend(string id)
+        {
+            return HandlerResult(
+                await Mediator.Send(new UpdateAttendance.Command { Id = Guid.Parse(id) })
+            );
         }
     }
 }

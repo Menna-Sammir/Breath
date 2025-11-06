@@ -7,16 +7,21 @@ using MediatR;
 
 namespace Application.Core
 {
-  public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null) : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
-  {
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null)
+        : IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
-      if (validator != null)
-      {
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
-      }
-      return await next();
+        public async Task<TResponse> Handle(
+            TRequest request,
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken
+        )
+        {
+            if (validator != null)
+            {
+                await validator.ValidateAndThrowAsync(request, cancellationToken);
+            }
+            return await next();
+        }
     }
-  }
 }

@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace Application.Core
 {
-  public class AppException(string message, int statusCode, string? details)
-  {
-    public int statusCode { get; set; } = statusCode;
-    public string message { get; set; } = message;
-    public string? details { get; set; } = details;
-
-
-  }
+    public class AppException(string message, int statusCode, string? details)
+    {
+        public int statusCode { get; set; } = statusCode;
+        public string message { get; set; } = message;
+        public string? details { get; set; } = details;
+    }
 }

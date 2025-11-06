@@ -4,7 +4,7 @@ namespace Domain
 {
     public class Activity
     {
-        public Guid Id { get; set; }  = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
         public required string Title { get; set; }
         public DateTime Date { get; set; }
         public required string Description { get; set; }
@@ -14,5 +14,7 @@ namespace Domain
         public required string Venue { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public ICollection<ActivityAttendee> Attendees { get; set; } = [];
     }
 }
