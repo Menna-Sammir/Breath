@@ -3,7 +3,7 @@ import agent from "../api/agent";
 import { useMemo, useState } from "react";
 import type { EditProfileSchema } from "../schemas/editProfileSchema";
 
-export const useProfile = (id?: string) => {
+export const useProfile = (id?: string, predicate?: string) => {
   const QueryClient = useQueryClient();
   const [filter, setFilter] = useState<string | null>(null);
 
@@ -13,7 +13,7 @@ export const useProfile = (id?: string) => {
       const response = await agent.get<Profile>(`/profiles/${id}`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !predicate,
   });
 
   const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
@@ -22,7 +22,16 @@ export const useProfile = (id?: string) => {
       const response = await agent.get<Photo[]>(`/profiles/${id}/photos`);
       return response.data;
     },
-    enabled: !!id,
+    enabled: !!id && !predicate,
+  });
+
+  const { data: followings, isLoading: loadingFollowings } = useQuery<Profile[]>({
+    queryKey: ["followings", id, predicate],
+    queryFn: async () => {
+      const response = await agent.get<User[]>(`/profiles/${id}/follow-list?Predicate=${predicate}`);
+      return response.data;
+    },
+    enabled: !!id && !!predicate,
   });
 
   const uploadPhoto = useMutation({
@@ -137,6 +146,36 @@ export const useProfile = (id?: string) => {
     },
   });
 
+  const updateFollowing = useMutation({
+    mutationFn: async () => {
+      await agent.post(`/profiles/${id}/follow`);
+    },
+    onSuccess: async () => {
+      QueryClient.setQueryData<Profile>(["profile", id], (profile: Profile | undefined) => {
+        QueryClient.invalidateQueries({ queryKey: ["followings", id, "followers"] });
+        if (!profile || profile.followersCount === undefined) return profile;
+
+        if (profile.following) {
+          return {
+            ...profile,
+            followersCount: profile.followersCount
+              ? profile.followersCount - 1
+              : profile.followersCount + 1,
+            following: !profile.following,
+          };
+        } else {
+          return {
+            ...profile,
+            followersCount: profile.followersCount
+              ? profile.followersCount + 1
+              : profile.followersCount - 1,
+            following: !profile.following,
+          };
+        }
+      });
+    },
+  });
+
   const isCurrentUser = useMemo(() => {
     return id === QueryClient.getQueryData<User>(["user"])?.id;
   }, [id, QueryClient]);
@@ -153,6 +192,9 @@ export const useProfile = (id?: string) => {
     loadingUserActivities,
     updateProfile,
     setFilter,
+    followings,
+    loadingFollowings,
+    updateFollowing,
     isCurrentUser,
   };
 };

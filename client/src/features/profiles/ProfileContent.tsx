@@ -1,9 +1,9 @@
-import { Dashboard } from "@mui/icons-material";
 import { Box, Paper, Tab, Tabs } from "@mui/material";
 import { SyntheticEvent, useState } from "react"
 import ProfilePhotos from "./ProfilePhotos";
 import ProfileAbout from "./ProfileAbout";
 import ProfileActivities from "./ProfileActivities";
+import ProfileFollowings from "./ProfileFollowings";
 
 export default function ProfileContent() {
   const [value, setValue] = useState(0);
@@ -16,6 +16,8 @@ export default function ProfileContent() {
     {label: 'About', content: <ProfileAbout />},
     {label: 'Photos', content: <ProfilePhotos />},
     {label: 'Events', content: <ProfileActivities />},
+    {label: 'Followings', content: <ProfileFollowings activeTab={value} />},
+    {label: 'Followers', content: <ProfileFollowings activeTab={value} />}
   ];
 
   return (

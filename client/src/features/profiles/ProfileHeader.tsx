@@ -12,14 +12,11 @@ import {
 import { useProfile } from "../../lib/hooks/useProfile";
 import { useParams } from "react-router";
 
-type Props = {
-  profile: Profile;
-};
-
-export default function ProfileHeader({ profile }: Props) {
-  // const isFollowing = false;
+export default function ProfileHeader() {
   const { id } = useParams();
-  const { isCurrentUser } = useProfile(id);
+  const { isCurrentUser, updateFollowing, profile } = useProfile(id);
+
+  if (!profile) return null;
 
   return (
     <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
@@ -60,8 +57,8 @@ export default function ProfileHeader({ profile }: Props) {
               <>
                 <Divider sx={{ width: "100%" }} />
                 <Button
-                  // onClick={() => updateFollowing.mutate()}
-                  // disabled={updateFollowing.isPending}
+                  onClick={() => updateFollowing.mutate()}
+                  disabled={updateFollowing.isPending}
                   fullWidth
                   variant="outlined"
                   color={profile.following ? "error" : "success"}
