@@ -42,4 +42,18 @@ public class ProfilesController : BaseAPIController
         var result = await Mediator.Send(new GetProfile.Query { UserId = userId });
         return HandlerResult(result);
     }
+
+    [HttpGet("{userId}/activities")]
+    public async Task<IActionResult> GetUserActivities(string userId, string filter)
+    {
+        return HandlerResult(
+            await Mediator.Send(new GetUserActivities.Query { UserId = userId, Filter = filter })
+        );
+    }
+
+    [HttpPut]
+    public async Task<ActionResult> UpdateProfile(EditProfile.Command command)
+    {
+        return HandlerResult(await Mediator.Send(command));
+    }
 }

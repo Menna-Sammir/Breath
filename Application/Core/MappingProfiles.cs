@@ -32,6 +32,12 @@ namespace Application.Core
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id));
 
             CreateMap<User, UserProfile>();
+            CreateMap<Activity, UserActivityDto>();
+            CreateMap<Comment, CommentDto>()
+                .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.User.ImageUrl))
+                .ForMember(d => d.CreatedAt, o => o.MapFrom(s => s.CreatedAt));
         }
     }
 }
