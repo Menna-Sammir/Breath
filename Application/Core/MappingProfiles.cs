@@ -13,6 +13,7 @@ namespace Application.Core
     {
         public MappingProfiles()
         {
+            string currentUserId = null;
             CreateMap<Activity, Activity>();
             CreateMap<CreateActivityDto, Activity>();
             CreateMap<EditActivityDto, Activity>();
@@ -31,7 +32,13 @@ namespace Application.Core
                 .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id));
 
-            CreateMap<User, UserProfile>();
+            CreateMap<User, UserProfile>()
+                .ForMember(d => d.FollowersCount, o => o.MapFrom(s => s.Followers.Count))
+                .ForMember(d => d.FollowingCount, o => o.MapFrom(s => s.Followings.Count))
+                .ForMember(
+                    d => d.Following,
+                    o => o.MapFrom(s => s.Followers.Any(f => f.Observer.Id == currentUserId))
+                );
             CreateMap<Activity, UserActivityDto>();
             CreateMap<Comment, CommentDto>()
                 .ForMember(d => d.UserId, o => o.MapFrom(s => s.User.Id))
