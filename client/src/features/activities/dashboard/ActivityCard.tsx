@@ -35,7 +35,7 @@ export default function ActivityCard({ activity }: Props) {
           avatar={
             <Avatar
               sx={{ height: 80, width: 80 }}
-              src={`/assets/categoryImages/${activity.category}.jpg`}
+              src={activity.hostImageUrl || "/assets/user.png"}
             />
           }
           title={activity.title}

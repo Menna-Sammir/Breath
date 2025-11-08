@@ -17,11 +17,15 @@ export const useActivities = (id?: string) => {
     },
     enabled: !id && location.pathname === "/activities" && !!currentUser,
     select: (data) => {
-      return data.map((activity) => ({
-        ...activity,
-        isHost: activity.hostId === currentUser?.id,
-        isGoing: activity.attendees.some((att) => att.id === currentUser?.id),
-      }));
+      return data.map((activity) => {
+        const host = activity.attendees.find((att) => att.id === activity.hostId);
+        return ({
+          ...activity,
+          isHost: activity.hostId === currentUser?.id,
+          isGoing: activity.attendees.some((att) => att.id === currentUser?.id),
+          hostImageUrl: host?.imageUrl,
+        });
+      });
     },
   });
 
@@ -32,12 +36,18 @@ export const useActivities = (id?: string) => {
       return response.data;
     },
     enabled: !!id && !!currentUser,
-    select: (activity) => ({
-      ...activity,
-      isHost: activity.hostId === currentUser?.id,
-      isGoing: activity.attendees.some((att) => att.id === currentUser?.id),
-    }),
+
+    select: (activity) => {
+      const host = activity.attendees.find((att) => att.id === activity.hostId);
+      return {
+        ...activity,
+        isHost: activity.hostId === currentUser?.id,
+        isGoing: activity.attendees.some((att) => att.id === currentUser?.id),
+        hostImageUrl: host?.imageUrl,
+      };
+    },
   });
+
 
   const updateActivity = useMutation({
     mutationFn: async (activity: Activity) => {
