@@ -4,27 +4,56 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace Application.Activities.Queries
 {
     public class GetActivityList
     {
-        public class Query : IRequest<List<ActivityDto>> { }
+        private const int MaxPageSize = 50;
 
-        public class Handler(AppDbContext context, ILogger<GetActivityList> logger, IMapper mapper)
-            : IRequestHandler<Query, List<ActivityDto>>
+        public class Query : IRequest<Result<PagedList<ActivityDto, DateTime?>>>
         {
-            public async Task<List<ActivityDto>> Handle(
+            public DateTime? Cursor { get; set; }
+            private int _PageSize = 3;
+            public int PageSize
+            {
+                get => _PageSize;
+                set => _PageSize = (value > MaxPageSize ? MaxPageSize : value);
+            }
+        }
+
+        public class Handler(AppDbContext context, IMapper mapper)
+            : IRequestHandler<Query, Result<PagedList<ActivityDto, DateTime?>>>
+        {
+            public async Task<Result<PagedList<ActivityDto, DateTime?>>> Handle(
                 Query request,
                 CancellationToken cancellationToken
             )
             {
-                logger.LogInformation("Fetching activity list");
-                return await context
-                    .Activities.ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
+                var query = context.Activities.OrderByDescending(a => a.Date).AsQueryable();
+                if (request.Cursor.HasValue)
+                {
+                    query = query.Where(a => a.Date < request.Cursor.Value);
+                }
+                var activities = await query
+                    .Take(request.PageSize + 1)
+                    .ProjectTo<ActivityDto>(mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
+                DateTime? nextCursor = null;
+                if (activities.Count > request.PageSize)
+                {
+                    nextCursor = activities.Last().Date;
+                    activities.RemoveAt(activities.Count - 1);
+                }
+
+                return Result<PagedList<ActivityDto, DateTime?>>.Success(
+                    new PagedList<ActivityDto, DateTime?>
+                    {
+                        Items = activities,
+                        NextCursor = nextCursor,
+                    }
+                );
             }
         }
     }
