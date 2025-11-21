@@ -42,6 +42,7 @@ namespace Application.Activities.Commands
                     IsHost = true,
                 };
                 activity.Attendees.Add(attendee);
+                Console.WriteLine("Creating activity:", activity.Title, activity.City);
 
                 var result = await context.SaveChangesAsync(cancellationToken);
 

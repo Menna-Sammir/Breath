@@ -13,14 +13,12 @@ namespace API.Controllers
     {
         [HttpGet]
         public async Task<ActionResult<PagedList<ActivityDto, DateTime?>>> GetActivities(
-            DateTime? cursor,
-            int pageSize = 3
+            [FromQuery] ActivityParams activityParams
         )
         {
-            var getActivities = await Mediator.Send(
-                new GetActivityList.Query { Cursor = cursor, PageSize = pageSize }
+            return HandlerResult(
+                await Mediator.Send(new GetActivityList.Query { Params = activityParams })
             );
-            return HandlerResult(getActivities);
         }
 
         [HttpGet("{id}")]
@@ -47,6 +45,7 @@ namespace API.Controllers
             [FromBody] EditActivityDto activity
         )
         {
+            Console.WriteLine("ActivitiesController EditActivity called");
             activity.Id = id;
             var updatedId = await Mediator.Send(
                 new EditActivity.Command { ActivityDto = activity }

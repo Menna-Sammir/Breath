@@ -26,14 +26,15 @@ public class IsHostRequirementHandler(
 
         var httpContext = httpContextAccessor.HttpContext;
 
-        if (httpContext?.GetRouteValue("id") is not string activityId)
+        if (httpContext?.GetRouteValue("id") is not string idString)
+            return;
+
+        if (!Guid.TryParse(idString, out var activityId))
             return;
 
         var attendee = await dbContext
             .ActivityAttendees.AsNoTracking()
-            .SingleOrDefaultAsync(aa =>
-                aa.UserId == userId && aa.ActivityId.ToString() == activityId
-            );
+            .SingleOrDefaultAsync(a => a.UserId == userId && a.ActivityId == activityId);
 
         if (attendee == null)
             return;

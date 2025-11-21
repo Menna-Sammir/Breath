@@ -9,6 +9,7 @@ namespace Persistence
     public class AppDbContext(DbContextOptions options) : IdentityDbContext<User>(options)
     {
         public required DbSet<Activity> Activities { get; set; }
+        public required DbSet<Review> Reviews { get; set; }
         public required DbSet<ActivityAttendee> ActivityAttendees { get; set; }
         public required DbSet<Photo> Photos { get; set; }
         public required DbSet<Comment> Comments { get; set; }
@@ -40,7 +41,7 @@ namespace Persistence
                 b.HasOne(uf => uf.Target)
                     .WithMany(u => u.Followers)
                     .HasForeignKey(uf => uf.TargetId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
             var dateTimeConverter = new ValueConverter<DateTime, DateTime>(

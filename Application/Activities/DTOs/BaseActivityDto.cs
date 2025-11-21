@@ -14,7 +14,9 @@ namespace Application.Activities.DTOs
         public string Category { get; set; } = string.Empty;
         public DateTime Date { get; set; }
         public string City { get; set; } = string.Empty;
-
+        public required string Duration { get; set; }
+        public decimal Price { get; set; }
+        public string? DeparturePlace { get; set; }
         public string Venue { get; set; } = string.Empty;
 
         public double? Latitude { get; set; } = null;

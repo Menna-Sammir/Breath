@@ -14,6 +14,10 @@ public class ActivityDto
     public required string HostDisplayName { get; set; }
     public required string HostId { get; set; }
 
+    public required string Duration { get; set; }
+    public decimal Price { get; set; }
+    public string? DeparturePlace { get; set; }
+
     // location props
     public required string City { get; set; }
     public required string Venue { get; set; }

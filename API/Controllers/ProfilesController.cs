@@ -9,46 +9,33 @@ namespace API.Controllers;
 public class ProfilesController : BaseAPIController
 {
     [HttpPost("add-photo")]
-    public async Task<ActionResult> AddPhoto([FromForm] IFormFile file)
+    public async Task<ActionResult<Photo>> AddPhoto(IFormFile file)
     {
-        var photoId = await Mediator.Send(new AddPhoto.Command { File = file });
-        return HandlerResult(photoId);
+        return HandlerResult(await Mediator.Send(new AddPhoto.Command { File = file }));
     }
 
     [HttpGet("{userId}/photos")]
     public async Task<ActionResult<List<Photo>>> GetPhotosForUser(string userId)
     {
-        var result = await Mediator.Send(new GetProfilePhotos.Query { UserId = userId });
-        return HandlerResult(result);
+        return HandlerResult(await Mediator.Send(new GetProfilePhotos.Query { UserId = userId }));
     }
 
-    [HttpDelete("{photoId}/photo")]
+    [HttpDelete("{photoId}/photos")]
     public async Task<ActionResult> DeletePhoto(string photoId)
     {
-        var result = await Mediator.Send(new DeletePhoto.Command { PhotoId = photoId });
-        return HandlerResult(result);
+        return HandlerResult(await Mediator.Send(new DeletePhoto.Command { PhotoId = photoId }));
     }
 
     [HttpPut("{photoId}/setMain")]
     public async Task<ActionResult> SetMainPhoto(string photoId)
     {
-        var result = await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId });
-        return HandlerResult(result);
+        return HandlerResult(await Mediator.Send(new SetMainPhoto.Command { PhotoId = photoId }));
     }
 
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserProfile>> GetProfile(string userId)
     {
-        var result = await Mediator.Send(new GetProfile.Query { UserId = userId });
-        return HandlerResult(result);
-    }
-
-    [HttpGet("{userId}/activities")]
-    public async Task<IActionResult> GetUserActivities(string userId, string filter)
-    {
-        return HandlerResult(
-            await Mediator.Send(new GetUserActivities.Query { UserId = userId, Filter = filter })
-        );
+        return HandlerResult(await Mediator.Send(new GetProfile.Query { UserId = userId }));
     }
 
     [HttpPut]
@@ -58,21 +45,26 @@ public class ProfilesController : BaseAPIController
     }
 
     [HttpPost("{userId}/follow")]
-    public async Task<ActionResult> FollowToggle(string targetUserId)
+    public async Task<ActionResult> FollowToggle(string userId)
     {
         return HandlerResult(
-            await Mediator.Send(new FollowToggle.Command { TargetUserId = targetUserId })
+            await Mediator.Send(new FollowToggle.Command { TargetUserId = userId })
         );
     }
 
     [HttpGet("{userId}/follow-list")]
-    public async Task<ActionResult<List<UserProfile>>> GetFollowings(
-        string userId,
-        string predicate
-    )
+    public async Task<ActionResult> GetFollowings(string userId, string predicate)
     {
         return HandlerResult(
             await Mediator.Send(new GetFollowings.Query { UserId = userId, Predicate = predicate })
+        );
+    }
+
+    [HttpGet("{userId}/activities")]
+    public async Task<IActionResult> GetUserActivities(string userId, string filter)
+    {
+        return HandlerResult(
+            await Mediator.Send(new GetUserActivities.Query { UserId = userId, Filter = filter })
         );
     }
 }

@@ -25,9 +25,6 @@ public class GetProfilePhotos
                 .SelectMany(x => x.Photos)
                 .ToListAsync(cancellationToken);
 
-            if (photos == null || !photos.Any())
-                return Result<List<Photo>>.Failure("No photos found", 404);
-
             return Result<List<Photo>>.Success(photos);
         }
     }

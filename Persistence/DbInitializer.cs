@@ -12,28 +12,24 @@ public class DbInitializer
         {
             new()
             {
-                Id = "bob-id",
                 DisplayName = "Bob",
                 UserName = "bob@test.com",
                 Email = "bob@test.com",
             },
             new()
             {
-                Id = "tom-id",
                 DisplayName = "Tom",
                 UserName = "tom@test.com",
                 Email = "tom@test.com",
             },
             new()
             {
-                Id = "jane-id",
                 DisplayName = "Jane",
                 UserName = "jane@test.com",
                 Email = "jane@test.com",
             },
             new()
             {
-                Id = "menna-id",
                 DisplayName = "Menna",
                 UserName = "menna@test.com",
                 Email = "menna@test.com",
@@ -60,6 +56,8 @@ public class DbInitializer
                 Description = "Activity 2 months ago",
                 Category = "drinks",
                 City = "London",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Venue =
                     "The Lamb and Flag, 33, Rose Street, Seven Dials, Covent Garden, London, Greater London, England, WC2E 9EB, United Kingdom",
                 Latitude = 51.51171665,
@@ -77,6 +75,8 @@ public class DbInitializer
                 Description = "Activity 1 month ago",
                 Category = "culture",
                 City = "Paris",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Venue =
                     "Louvre Museum, Rue Saint-Honoré, Quartier du Palais Royal, 1st Arrondissement, Paris, Ile-de-France, Metropolitan France, 75001, France",
                 Latitude = 48.8611473,
@@ -94,6 +94,8 @@ public class DbInitializer
                 Date = DateTime.Now.AddMonths(1),
                 Description = "Activity 1 month in future",
                 Category = "culture",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 City = "London",
                 Venue = "Natural History Museum",
                 Latitude = 51.496510900000004,
@@ -106,6 +108,8 @@ public class DbInitializer
                 Date = DateTime.Now.AddMonths(2),
                 Description = "Activity 2 months in future",
                 Category = "music",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 City = "London",
                 Venue = "The O2",
                 Latitude = 51.502936649999995,
@@ -123,6 +127,8 @@ public class DbInitializer
                 Description = "Activity 3 months in future",
                 Category = "drinks",
                 City = "London",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Venue = "The Mayflower",
                 Latitude = 51.501778,
                 Longitude = -0.053577,
@@ -134,6 +140,8 @@ public class DbInitializer
                 Date = DateTime.Now.AddMonths(4),
                 Description = "Activity 4 months in future",
                 Category = "drinks",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 City = "London",
                 Venue = "The Blackfriar",
                 Latitude = 51.512146650000005,
@@ -153,6 +161,8 @@ public class DbInitializer
                 City = "London",
                 Venue =
                     "Sherlock Holmes Museum, 221b, Baker Street, Marylebone, London, Greater London, England, NW1 6XE, United Kingdom",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Latitude = 51.5237629,
                 Longitude = -0.1584743,
                 Attendees = [new() { UserId = users[0].Id, IsHost = true }],
@@ -164,6 +174,8 @@ public class DbInitializer
                 Description = "Activity 6 months in future",
                 Category = "music",
                 City = "London",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Venue =
                     "Roundhouse, Chalk Farm Road, Maitland Park, Chalk Farm, London Borough of Camden, London, Greater London, England, NW1 8EH, United Kingdom",
                 Latitude = 51.5432505,
@@ -181,7 +193,10 @@ public class DbInitializer
                 Description = "Activity 7 months in future",
                 Category = "travel",
                 City = "London",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Venue = "River Thames, England, United Kingdom",
+                DeparturePlace = "Heathrow Airport",
                 Latitude = 51.5575525,
                 Longitude = -0.781404,
                 Attendees =
@@ -197,7 +212,10 @@ public class DbInitializer
                 Description = "Activity 8 months in future",
                 Category = "film",
                 City = "London",
+                Duration = "7 Days, 6 Nights",
+                Price = 1899m,
                 Venue = "Odeon Leicester Square",
+                DeparturePlace = "Heathrow Airport",
                 Latitude = 51.5575525,
                 Longitude = -0.781404,
                 Attendees = [new() { UserId = users[0].Id, IsHost = true }],

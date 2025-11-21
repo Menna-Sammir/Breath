@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Activities.DTOs;
 using Application.Profiles.DTOs;
+using Application.Reviews.DTOs;
 using AutoMapper;
 using Domain;
 
@@ -17,6 +18,11 @@ namespace Application.Core
             CreateMap<Activity, Activity>();
             CreateMap<CreateActivityDto, Activity>();
             CreateMap<EditActivityDto, Activity>();
+            CreateMap<Review, ReviewsDto>()
+                .ForMember(d => d.AuthorName, o => o.MapFrom(s => s.User.DisplayName))
+                .ForMember(d => d.AuthorImage, o => o.MapFrom(s => s.User.ImageUrl))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.User.ImageUrl));
             CreateMap<Activity, ActivityDto>()
                 .ForMember(
                     d => d.HostDisplayName,

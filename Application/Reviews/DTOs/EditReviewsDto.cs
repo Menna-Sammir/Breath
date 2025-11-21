@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 
-namespace Application.Activities.DTOs
+namespace Application.Reviews.DTOs
 {
-    public class EditActivityDto : BaseActivityDto
+    public class EditReviewDto : BaseReviewDto
     {
         public Guid Id { get; set; } = Guid.Empty;
 
-        public static implicit operator EditActivityDto(Activity v)
+        public static implicit operator EditReviewDto(Review v)
         {
             throw new NotImplementedException();
         }
