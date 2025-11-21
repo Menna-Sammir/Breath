@@ -1,5 +1,4 @@
-import { Star, StarBorder } from "@mui/icons-material";
-import { Box, Button } from "@mui/material";
+import { Star } from "lucide-react";
 
 type Props = {
   selected: boolean;
@@ -7,29 +6,14 @@ type Props = {
 
 export default function StarButton({ selected }: Props) {
   return (
-    <Box sx={{ position: "relative" }}>
-      <Button
-        sx={{
-          opacity: 0.8,
-          transition: "opacity 0.3s",
-          position: "relative",
-          cursor: "pointer",
-        }}
+    <div className="relative">
+      <button
+        aria-label="Star"
+        className="relative opacity-80 transition-opacity duration-300 cursor-pointer inline-flex items-center justify-center"
       >
-        <StarBorder
-          sx={{
-            fontSize: 32,
-            color: "white",
-            position: "absolute",
-          }}
-        />
-        <Star
-          sx={{
-            fontSize: 28,
-            color: selected ? "yellow" : "rgba(0,0,0,0.5)",
-          }}
-        />
-      </Button>
-    </Box>
+        <Star className="absolute text-white" size={32} fill="none" />
+        <Star className={`relative ${selected ? "text-yellow-400" : "text-gray-500"}`} size={28} fill={selected ? "currentColor" : "none"} />
+      </button>
+    </div>
   );
 }

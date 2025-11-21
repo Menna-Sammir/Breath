@@ -19,16 +19,21 @@ export const useProfile = (id?: string, predicate?: string) => {
   const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
     queryKey: ["photos", id],
     queryFn: async () => {
-      const response = await agent.get<Photo[]>(`/profiles/${id}/photos`);
+      const response = await agent.get(`/profiles/${id}/photos`);
+      console.log("Fetched photos:", response.data);
       return response.data;
     },
     enabled: !!id && !predicate,
   });
 
-  const { data: followings, isLoading: loadingFollowings } = useQuery<Profile[]>({
+  const { data: followings, isLoading: loadingFollowings } = useQuery<
+    Profile[]
+  >({
     queryKey: ["followings", id, predicate],
     queryFn: async () => {
-      const response = await agent.get<User[]>(`/profiles/${id}/follow-list?Predicate=${predicate}`);
+      const response = await agent.get<User[]>(
+        `/profiles/${id}/follow-list?Predicate=${predicate}`
+      );
       return response.data;
     },
     enabled: !!id && !!predicate,
@@ -39,7 +44,7 @@ export const useProfile = (id?: string, predicate?: string) => {
       const formData = new FormData();
       formData.append("file", file);
       const response = await agent.post<Photo>(
-        `/profiles/${id}/add-photo`,
+        `/profiles/add-photo`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -151,28 +156,33 @@ export const useProfile = (id?: string, predicate?: string) => {
       await agent.post(`/profiles/${id}/follow`);
     },
     onSuccess: async () => {
-      QueryClient.setQueryData<Profile>(["profile", id], (profile: Profile | undefined) => {
-        QueryClient.invalidateQueries({ queryKey: ["followings", id, "followers"] });
-        if (!profile || profile.followersCount === undefined) return profile;
+      QueryClient.setQueryData<Profile>(
+        ["profile", id],
+        (profile: Profile | undefined) => {
+          QueryClient.invalidateQueries({
+            queryKey: ["followings", id, "followers"],
+          });
+          if (!profile || profile.followersCount === undefined) return profile;
 
-        if (profile.following) {
-          return {
-            ...profile,
-            followersCount: profile.followersCount
-              ? profile.followersCount - 1
-              : profile.followersCount + 1,
-            following: !profile.following,
-          };
-        } else {
-          return {
-            ...profile,
-            followersCount: profile.followersCount
-              ? profile.followersCount + 1
-              : profile.followersCount - 1,
-            following: !profile.following,
-          };
+          if (profile.following) {
+            return {
+              ...profile,
+              followersCount: profile.followersCount
+                ? profile.followersCount - 1
+                : profile.followersCount + 1,
+              following: !profile.following,
+            };
+          } else {
+            return {
+              ...profile,
+              followersCount: profile.followersCount
+                ? profile.followersCount + 1
+                : profile.followersCount - 1,
+              following: !profile.following,
+            };
+          }
         }
-      });
+      );
     },
   });
 
@@ -181,20 +191,23 @@ export const useProfile = (id?: string, predicate?: string) => {
   }, [id, QueryClient]);
 
   return {
+
     profile,
-    loadingProfile,
-    photos,
-    loadingPhotos,
-    uploadPhoto,
-    deletePhoto,
-    setMainPhoto,
     userActivities,
     loadingUserActivities,
-    updateProfile,
-    setFilter,
     followings,
     loadingFollowings,
+    loadingProfile,
+    loadingPhotos,
+    photos,
+
+    uploadPhoto,
+    setMainPhoto,
+    deletePhoto,
+    updateProfile,
     updateFollowing,
+
+    setFilter,
     isCurrentUser,
   };
 };

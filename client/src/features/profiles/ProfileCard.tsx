@@ -1,62 +1,49 @@
-import { Person } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Chip,
-  Divider,
-  Typography,
-} from "@mui/material";
 import { Link } from "react-router";
 
 type Props = {
   profile: Profile;
 };
+
 export default function ProfileCard({ profile }: Props) {
   const following = false;
   return (
     <Link to={`/profiles/${profile.id}`} style={{ textDecoration: "none" }}>
-      <Card
-        sx={{ borderRadius: 3, p: 3, maxWidth: 300, textDecoration: "none" }}
-        elevation={4}
-      >
-        <CardMedia
-          component="img"
-          height="200"
-          image={profile?.imageUrl || "/images/user.png"}
+      <div className="rounded-lg p-4 max-w-sm min-w-[200px] shadow-md bg-white">
+        <img
+          src={profile?.imageUrl || "/images/user.png"}
           alt={`${profile.displayName}'s avatar`}
-          sx={{ borderRadius: 2, mb: 2, width: 200, zIndex: 50 }}
+          className="w-48 h-48 object-cover rounded-md mb-3"
         />
-        <CardContent sx={{ p: 0 }}>
-          <Box display="flex" alignItems="center" gap={1}>
-            <Typography variant="h6" component="div" color="primary">
+
+        <div className="p-0">
+          <div className="flex items-center gap-2">
+            <h4 className="text-lg font-semibold text-indigo-600">
               {profile.displayName}
-            </Typography>
+            </h4>
             {following && (
-              <Chip
-                label="Following"
-                size="small"
-                color="secondary"
-                variant="outlined"
-              />
+              <span className="inline-block rounded border px-2 py-0.5 text-sm text-gray-700">
+                Following
+              </span>
             )}
-          </Box>
-        </CardContent>
-        <Divider sx={{ mb: 2 }} />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "start",
-          }}
-        >
-          <Person />
-          <Typography sx={{ ml: 1 }}>
+          </div>
+        </div>
+
+        <hr className="my-3" />
+
+        <div className="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 text-gray-600"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+          </svg>
+          <div className="ml-2 text-sm text-gray-700">
             {profile.followersCount} Followers
-          </Typography>
-        </Box>
-      </Card>
+          </div>
+        </div>
+      </div>
     </Link>
   );
 }

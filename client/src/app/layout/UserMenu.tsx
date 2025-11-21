@@ -1,90 +1,83 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Divider,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
-import { Add, Logout, Password, Person } from "@mui/icons-material";
+import { Plus, LogOut, Key, User } from "lucide-react";
 import { useAccount } from "../../lib/hooks/useAccounts";
 
 export default function UserMenu() {
   const { currentUser, logoutUser } = useAccount();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleToggle = () => setOpen((s) => !s);
+  const handleClose = () => setOpen(false);
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <>
-      <Button
-        onClick={handleClick}
-        color="inherit"
-        size="large"
-        sx={{ fontSize: "1.1rem" }}
+    <div className="relative inline-block" ref={wrapperRef}>
+      <button
+        onClick={handleToggle}
+        className="flex items-center gap-2 text-lg text-gray-800 focus:outline-none"
+        aria-haspopup="true"
+        aria-expanded={open}
+        aria-label="User menu"
       >
-        <Box display="flex" alignItems="center" gap={2}>
-          <Avatar src={currentUser?.imageUrl} alt="current user image" />
-          {currentUser?.displayName}
-        </Box>
-      </Button>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem component={Link} to="/createActivity" onClick={handleClose}>
-          <ListItemIcon>
-            <Add />
-          </ListItemIcon>
-          <ListItemText>Create Activity</ListItemText>
-        </MenuItem>
-        <MenuItem
-          component={Link}
-          to={`/profiles/${currentUser?.id}`}
-          onClick={handleClose}
-        >
-          <ListItemIcon>
-            <Person />
-          </ListItemIcon>
-          <ListItemText>My profile</ListItemText>
-        </MenuItem>
-        <MenuItem component={Link} to="/change-password" onClick={handleClose}>
-          <ListItemIcon>
-            <Password />
-          </ListItemIcon>
-          <ListItemText>Change password</ListItemText>
-        </MenuItem>
-        <Divider />
-        <MenuItem
-          onClick={() => {
-            logoutUser.mutate();
-            handleClose();
-          }}
-        >
-          <ListItemIcon>
-            <Logout />
-          </ListItemIcon>
-          <ListItemText>Logout</ListItemText>
-        </MenuItem>
-      </Menu>
-    </>
+        {currentUser?.imageUrl ? (
+          <img
+            src={currentUser.imageUrl}
+            alt="current user"
+            className="w-9 h-9 rounded-full object-cover"
+          />
+        ) : (
+          <div className="w-9 h-9 rounded-full bg-gray-300 flex items-center justify-center text-sm text-white">
+            {currentUser?.displayName?.[0]?.toUpperCase()}
+          </div>
+        )}
+        <span>{currentUser?.displayName}</span>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
+            <Link to="/createActivity" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" onClick={handleClose}>
+              <Plus size={18} />
+              <span>Create Activity</span>
+            </Link>
+
+            <Link to={`/profiles/${currentUser?.id}`} className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" onClick={handleClose}>
+              <User size={18} />
+              <span>My profile</span>
+            </Link>
+
+            <Link to="/change-password" className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" onClick={handleClose}>
+              <Key size={18} />
+              <span>Change password</span>
+            </Link>
+
+            <div className="border-t my-1" />
+
+            <button
+              className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onClick={() => {
+                logoutUser.mutate();
+                handleClose();
+              }}
+              role="menuitem"
+            >
+              <LogOut size={18} />
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

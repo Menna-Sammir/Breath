@@ -1,5 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from "react";
-import { Box, Card, CardContent, CardMedia, Grid, Tab, Tabs, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { format } from "date-fns";
 import { useProfile } from "../../lib/hooks/useProfile.ts";
@@ -19,61 +18,55 @@ export default function ProfileActivities() {
         { menuItem: 'Hosting', key: 'hosting' }
     ];
 
-    const handleTabChange = (_: SyntheticEvent, newValue: number) => {
+    const handleTabChange = (newValue: number) => {
         setActiveTab(newValue);
         setFilter(tabs[newValue].key);
     };
 
     return (
-        <Box>
-            <Grid container spacing={2}>
-                <Grid size={12}>
-                    <Tabs
-                        value={activeTab}
-                        onChange={handleTabChange}
-                    >
-                        {tabs.map((tab, index) => (
-                            <Tab label={tab.menuItem} key={index} />
-                        ))}
-                    </Tabs>
-                </Grid>
-            </Grid>
+        <div>
+            <div className="mb-4">
+                <nav className="flex gap-2">
+                    {tabs.map((tab, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleTabChange(index)}
+                            className={`px-3 py-2 rounded ${index === activeTab ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                        >
+                            {tab.menuItem}
+                        </button>
+                    ))}
+                </nav>
+            </div>
+
             {(!userActivities || userActivities.length === 0) && !loadingUserActivities ? (
-                <Typography mt={2}>
-                    No activities to show
-                </Typography>
+                <p className="mt-2">No activities to show</p>
             ) : null}
-            <Grid container spacing={2} sx={{ marginTop: 2, height: 400, overflow: 'auto' }}>
-                {userActivities && userActivities.map((activity: Activity) => (
-                    <Grid size={2} key={activity.id}>
-                        <Link to={`/activities/${activity.id}`} style={{ textDecoration: 'none' }}>
-                            <Card elevation={4}>
-                                <CardMedia
-                                    component="img"
-                                    height="100"
-                                    image={`/images/categoryImages/${activity.category}.jpg`}
-                                    alt={activity.title}
-                                    sx={{ objectFit: 'cover' }}
-                                />
-                                <CardContent>
-                                    <Typography variant="h6" textAlign="center" mb={1}>
-                                        {activity.title}
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        textAlign="center"
-                                        display='flex'
-                                        flexDirection='column'
-                                    >
-                                        <span>{format(activity.date, 'do LLL yyyy')}</span>
-                                        <span>{format(activity.date, 'h:mm a')}</span>
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </Link>
-                    </Grid>
-                ))}
-            </Grid>
-        </Box>
+
+            <div className="mt-2" style={{ height: 400, overflow: 'auto' }}>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {userActivities && userActivities.map((activity: Activity) => (
+                        <div key={activity.id}>
+                            <Link to={`/activities/${activity.id}`} style={{ textDecoration: 'none' }}>
+                                <div className="rounded shadow-md overflow-hidden bg-white">
+                                    <img
+                                        src={`/images/categoryImages/${activity.category}.jpg`}
+                                        alt={activity.title}
+                                        className="w-full h-24 object-cover"
+                                    />
+                                    <div className="p-3 text-center">
+                                        <h4 className="text-md font-semibold mb-1 text-gray-800">{activity.title}</h4>
+                                        <div className="text-sm text-gray-600">
+                                            <div>{format(activity.date, 'do LLL yyyy')}</div>
+                                            <div>{format(activity.date, 'h:mm a')}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     )
 }

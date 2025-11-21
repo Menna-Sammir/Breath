@@ -1,6 +1,5 @@
 import { useParams } from "react-router"
 import { useProfile } from "../../lib/hooks/useProfile";
-import { Box, Button, Divider, Typography } from "@mui/material";
 import { useState } from "react";
 import ProfileEdit from "./ProfileEditForm";
 
@@ -10,24 +9,28 @@ export default function ProfileAbout() {
     const [editMode, setEditMode] = useState(false);
 
     return (
-        <Box>
-            <Box display='flex' justifyContent='space-between'>
-                <Typography variant="h5">About {profile?.displayName}</Typography>
-                {isCurrentUser &&
-                    <Button onClick={() => setEditMode(!editMode)}>
+        <div>
+            <div className="flex justify-between items-center">
+                <h3 className="text-xl font-semibold">About {profile?.displayName}</h3>
+                {isCurrentUser && (
+                    <button
+                        onClick={() => setEditMode(!editMode)}
+                        className="rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                    >
                         {editMode ? 'Cancel' : 'Edit profile'}
-                    </Button>}
-            </Box>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ overflow: 'auto', maxHeight: 350 }}>
+                    </button>
+                )}
+            </div>
+            <hr className="my-2" />
+            <div className="overflow-auto max-h-80">
                 {editMode ? (
                     <ProfileEdit setEditMode={setEditMode} />
                 ) : (
-                    <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
+                    <p className="whitespace-pre-wrap">
                         {profile?.bio || 'No description added yet'}
-                    </Typography>
+                    </p>
                 )}
-            </Box>
-        </Box>
+            </div>
+        </div>
     )
 }

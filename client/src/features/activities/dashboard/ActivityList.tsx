@@ -1,22 +1,49 @@
-import { Box } from "@mui/material";
 import ActivityCard from "./ActivityCard";
 import { useActivities } from "../../../lib/hooks/useActivities";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 
-export default function ActivityList() {
-  const { activities, isLoading } = useActivities();
+const ActivityList = observer(function ActivityList() {
+  const { activitiesGroup, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useActivities();
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: "200px",
+  });
 
-  if (isLoading) {
-    return <div>Loading activities...</div>;
-  }
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
 
-  if (!activities || activities.length === 0) {
-    return <div>No activities found.</div>;
-  }
+  if (isLoading) return <h3>Loading...</h3>;
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      {activities?.map((activity) => (
-        <ActivityCard key={activity.id} activity={activity} />
+    <div className="flex flex-col gap-8 rounded-3xl border border-gray-light bg-white p-6 shadow-3xl m-2">
+      {activitiesGroup?.pages.map((activities, index) => (
+        <div
+          key={index}
+          className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-2
+          gap-6
+        "
+        >
+          {activities?.items.map((activity) => (
+            <ActivityCard key={activity.id} activity={activity} />
+          ))}
+        </div>
       ))}
-    </Box>
+      {/* sentinel element observed for infinite scroll */}
+      <div ref={ref} className="h-1" />
+      {isFetchingNextPage && <h4>Loading more...</h4>}
+      {!activitiesGroup && <h3>No activities found</h3>}
+    </div>
   );
-}
+});
+
+export default ActivityList;

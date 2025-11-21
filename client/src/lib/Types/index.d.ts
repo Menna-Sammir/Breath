@@ -14,18 +14,23 @@ type Activity = {
   title: string;
   date: Date;
   description: string;
+  price: number;
   category: string;
+  duration: string;
   isCancelled: boolean;
   city: string;
   venue: string;
   latitude: number;
   longitude: number;
+  departurePlace?: string;
   attendees: Profile[];
   isGoing: boolean;
   isHost: boolean;
   hostId: string;
   hostDisplayName: string;
   hostImageUrl?: string;
+  departureCity?: string;
+  departureVenue?: string;
 };
 
 type Profile = {
@@ -89,4 +94,25 @@ type LocationIQAddress = {
   country: string;
   country_code: string;
   neighbourhood?: string;
+};
+
+type Review = {
+  id: string;
+  rating: number;
+  body: string;
+  createdAt: Date;
+  authorName: string;
+  authorImage: string;
+};
+
+type RatingSummary = {
+  rating: number;
+  count: number;
+  percentage: number;
+};
+
+type ReviewsSummary = {
+  averageRating: number;
+  totalReviews: number;
+  ratingDistribution: RatingSummary[];
 };

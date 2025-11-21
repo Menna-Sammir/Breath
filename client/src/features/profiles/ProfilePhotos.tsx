@@ -1,13 +1,5 @@
 import { useParams } from "react-router";
 import { useProfile } from "../../lib/hooks/useProfile";
-import {
-  Box,
-  Button,
-  Divider,
-  ImageList,
-  ImageListItem,
-  Typography,
-} from "@mui/material";
 import { useState } from "react";
 import PhotoUploadWidget from "../../app/shared/components/PhotoUploadWidget";
 import StarButton from "../../app/shared/components/StarButton";
@@ -34,71 +26,75 @@ export default function ProfilePhotos() {
     });
   };
 
-  if (loadingPhotos) return <Typography>Loading photos...</Typography>;
+  if (loadingPhotos) return <p>Loading photos...</p>;
 
-  if (!photos) return <Typography>No photos found for this user</Typography>;
+  if (!photos) return <p>No photos found for this user</p>;
 
   return (
-    <Box>
-      <Box display="flex" justifyContent="space-between">
-        <Typography variant="h5">Photos</Typography>
+    <div>
+      <div className="flex justify-between items-center">
+        <h3 className="text-xl font-semibold">Photos</h3>
         {isCurrentUser && (
-          <Button onClick={() => setEditMode(!editMode)}>
+          <button
+            onClick={() => setEditMode(!editMode)}
+            className="rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 bg-primary/10"
+          >
             {editMode ? "Cancel" : "Add photo"}
-          </Button>
+          </button>
         )}
-      </Box>
-      <Divider sx={{ my: 2 }} />
+      </div>
+
+      <hr className="my-2" />
 
       {editMode ? (
-        <PhotoUploadWidget
-          uploadPhoto={handlePhotoUpload}
-          loading={uploadPhoto.isPending}
-        />
+        <PhotoUploadWidget uploadPhoto={handlePhotoUpload} loading={uploadPhoto.isPending} />
       ) : (
         <>
           {photos.length === 0 ? (
-            <Typography>No photos added yet</Typography>
+            <p>No photos added yet</p>
           ) : (
-            <ImageList sx={{ height: 450 }} cols={6} rowHeight={164}>
-              {photos.map((item) => (
-                <ImageListItem key={item.id}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2" style={{ height: 450, overflow: 'auto' }}>
+              {photos?.map((item) => (
+                <div key={item.id} className="relative">
                   <img
                     srcSet={`${item.url.replace(
                       "/upload/",
-                      "/upload/w_164,h_164,c_fill,f_auto,dpr_2,g_face/"
+                      "/upload/w_94,h_94,c_fill,f_auto,dpr_2,g_face/"
                     )}`}
                     src={`${item.url.replace(
                       "/upload/",
-                      "/upload/w_164,h_164,c_fill,f_auto,g_face/"
+                      "/upload/w_94,h_94,c_fill,f_auto,g_face/"
                     )}`}
                     alt={"user profile image"}
                     loading="lazy"
+                    className="w-full object-cover rounded"
                   />
                   {isCurrentUser && (
-                    <div>
-                      <Box
-                        sx={{ position: "absolute", top: 0, left: 0 }}
+                    <>
+                      <button
                         onClick={() => setMainPhoto.mutate(item)}
+                        className="absolute top-1 left-1"
+                        aria-label="Set main photo"
                       >
                         <StarButton selected={item.url === profile?.imageUrl} />
-                      </Box>
+                      </button>
                       {profile?.imageUrl !== item.url && (
-                        <Box
-                          sx={{ position: "absolute", top: 0, right: 0 }}
+                        <button
                           onClick={() => deletePhoto.mutate(item.id)}
+                          className="absolute top-1 right-1"
+                          aria-label="Delete photo"
                         >
                           <DeleteButton />
-                        </Box>
+                        </button>
                       )}
-                    </div>
+                    </>
                   )}
-                </ImageListItem>
+                </div>
               ))}
-            </ImageList>
+            </div>
           )}
         </>
       )}
-    </Box>
+    </div>
   );
 }

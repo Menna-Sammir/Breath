@@ -1,75 +1,61 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  Divider,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
 import { useProfile } from "../../lib/hooks/useProfile";
 import { useParams } from "react-router";
 
 export default function ProfileHeader() {
   const { id } = useParams();
-  const { isCurrentUser, updateFollowing, profile } = useProfile(id);
 
-  if (!profile) return null;
+  const { isCurrentUser, updateFollowing, profile, loadingProfile } = useProfile(id);
+
+  if (loadingProfile) return <div>Loading profile...</div>;
+  if (!profile) return <div>Profile not found</div>;
 
   return (
-    <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-      <Grid container spacing={2}>
-        <Grid size={8}>
-          <Stack direction="row" spacing={3} alignItems="center">
-            <Avatar
-              src={profile.imageUrl}
-              alt={profile.displayName + " image"}
-              sx={{ width: 150, height: 150 }}
-            />
-            <Box display="flex" flexDirection="column" gap={2}>
-              <Typography variant="h4">{profile.displayName}</Typography>
-              {profile.following && (
-                <Chip
-                  variant="outlined"
-                  color="secondary"
-                  label="Following"
-                  sx={{ borderRadius: 1 }}
-                />
-              )}
-            </Box>
-          </Stack>
-        </Grid>
-        <Grid size={4}>
-          <Stack spacing={2} alignItems="center">
-            <Box display="flex" justifyContent="space-around" width="100%">
-              <Box textAlign="center">
-                <Typography variant="h6">Followers</Typography>
-                <Typography variant="h3">{profile.followersCount}</Typography>
-              </Box>
-              <Box textAlign="center">
-                <Typography variant="h6">Following</Typography>
-                <Typography variant="h3">{profile.followingCount}</Typography>
-              </Box>
-            </Box>
-            {!isCurrentUser && (
-              <>
-                <Divider sx={{ width: "100%" }} />
-                <Button
-                  onClick={() => updateFollowing.mutate()}
-                  disabled={updateFollowing.isPending}
-                  fullWidth
-                  variant="outlined"
-                  color={profile.following ? "error" : "success"}
-                >
-                  {profile.following ? "Unfollow" : "Follow"}
-                </Button>
-              </>
+    <div className="rounded-lg bg-white p-6 shadow-md">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="flex items-center gap-6 md:flex-1">
+          <img
+            src={profile?.imageUrl}
+            alt={(profile?.displayName ?? "") + " image"}
+            className="w-36 h-36 rounded-full object-cover"
+          />
+          <div className="flex flex-col">
+            <h3 className="text-2xl font-semibold">{profile?.displayName}</h3>
+            {profile?.following && (
+              <span className="mt-2 inline-block rounded border px-2 py-0.5 text-sm text-gray-700">Following</span>
             )}
-          </Stack>
-        </Grid>
-      </Grid>
-    </Paper>
+          </div>
+        </div>
+
+        <div className="md:w-1/3">
+          <div className="flex justify-around mb-4">
+            <div className="text-center">
+              <div className="text-sm text-gray-600">Followers</div>
+              <div className="text-2xl font-bold">{profile?.followersCount}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-sm text-gray-600">Following</div>
+              <div className="text-2xl font-bold">{profile?.followingCount}</div>
+            </div>
+          </div>
+
+          {!isCurrentUser && (
+            <>
+              <hr className="mb-3" />
+              <button
+                onClick={() => updateFollowing.mutate()}
+                disabled={updateFollowing.isPending}
+                className={`w-full rounded px-4 py-2 text-sm font-medium ${
+                  profile?.following
+                    ? "border border-red-500 text-red-600 hover:bg-red-50"
+                    : "bg-green-600 text-white hover:bg-green-700"
+                } disabled:opacity-50 disabled:cursor-not-allowed`}
+              >
+                {profile?.following ? "Unfollow" : "Follow"}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

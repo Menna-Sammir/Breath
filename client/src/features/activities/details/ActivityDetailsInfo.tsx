@@ -1,67 +1,73 @@
-import { CalendarToday, Info, Place } from "@mui/icons-material";
-import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
-import { formatDate } from "../../../lib/util/util";
-import MapComponent from "../../../app/shared/components/MapComponent";
-import { useState } from "react";
+import { Link } from "react-router";
+import { useActivities } from "../../../lib/hooks/useActivities";
+import { UserMinus, UserPlus } from "lucide-react";
 
 type Props = {
   activity: Activity;
 };
 
 export default function ActivityDetailsInfo({ activity }: Props) {
-  const [mapOpen, setMapOpen] = useState(false);
-
+  const { updateAttendance } = useActivities(activity.id);
   if (!activity) return null;
+  const { isCancelled, isHost, isGoing } = activity;
 
   return (
-    <Paper sx={{ mb: 2 }}>
-      <Grid container alignItems="center" pl={2} py={1}>
-        <Grid size={1}>
-          <Info color="info" fontSize="large" />
-        </Grid>
-        <Grid size={11}>
-          <Typography>{activity.description}</Typography>
-        </Grid>
-      </Grid>
-      <Divider />
-      <Grid container alignItems="center" pl={2} py={1}>
-        <Grid size={1}>
-          <CalendarToday color="info" fontSize="large" />
-        </Grid>
-        <Grid size={11}>
-          <Typography>
-            {formatDate(activity?.date) ?? <span>No Date Provided</span>}
-          </Typography>
-        </Grid>
-      </Grid>
-      <Divider />
+    <div className="mb-2 bg-white shadow-md rounded-2xl p-6 flex align-top justify-between">
+      <div className="card">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Overview</h2>
+        <p className="text-gray-700 leading-relaxed">{activity.description}</p>
+      </div>
 
-      <Grid container alignItems="center" pl={2} py={1}>
-        <Grid size={1}>
-          <Place color="info" fontSize="large" />
-        </Grid>
-        <Grid
-          size={11}
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Typography>
-            {activity.venue}, {activity.city}
-          </Typography>
-          <Button sx={{ whiteSpace: "nowrap" }} onClick={() => setMapOpen(!mapOpen)}>
-            {mapOpen ? "Hide Map" : "Show Map"}
-          </Button>
-        </Grid>
-      </Grid>
-      {mapOpen && (
-        <Box mb={2} mt={-1} height={300} width="100%" display="block">
-          <MapComponent
-            position={[activity.latitude, activity.longitude]}
-            venue={activity.venue}
-          />
-        </Box>
-      )}
-    </Paper>
+      <div className="flex gap-2 h-14">
+        {isHost ? (
+          <>
+            {/* Cancel / Re-activate */}
+            <button
+              onClick={() => updateAttendance.mutate(activity.id)}
+              disabled={updateAttendance.isPending}
+              className={`
+          px-4 py-2 rounded-lg text-white font-semibold
+          ${isCancelled ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}
+          disabled:opacity-50 disabled:cursor-not-allowed
+        `}
+            >
+              {isCancelled ? "Re-activate Activity" : "Cancel Activity"}
+            </button>
+
+            {/* Manage Event */}
+            <Link
+              to={`/manage/${activity.id}`}
+              className={`
+          px-4 py-2 rounded-lg text-white font-semibold bg-blue-600 hover:bg-blue-700
+          ${isCancelled ? "pointer-events-none opacity-50" : ""}
+        `}
+            >
+              Manage Event
+            </Link>
+          </>
+        ) : (
+          /* Join / Cancel Attendance */
+          <button
+            onClick={() => updateAttendance.mutate(activity.id)}
+            disabled={updateAttendance.isPending || isCancelled}
+            className={`
+        px-4 py-2 rounded-xl text-white font-semibold
+        ${isGoing ? "bg-blue-600/50 hover:bg-blue-700/50" : "bg-cyan-600 hover:bg-cyan-700"}
+        disabled:opacity-50 disabled:cursor-not-allowed
+      `}
+          >
+            {isGoing ? (
+              <div className="flex justify-center">
+                Cancel <UserMinus className="ml-2" />
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                Join <UserPlus className="ml-2" />
+              </div>
+            )}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }

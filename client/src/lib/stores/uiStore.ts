@@ -7,11 +7,13 @@ export class UiStore {
     makeAutoObservable(this);
   }
 
+  // mark UI as busy (show loader)
   isBusy() {
-    return this.isLoading === true;
+    this.isLoading = true;
   }
 
-  isIdle () {
-    return this.isLoading === false;
+  // mark UI as idle (hide loader)
+  isIdle() {
+    this.isLoading = false;
   }
 }

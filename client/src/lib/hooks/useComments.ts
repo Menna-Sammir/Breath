@@ -27,6 +27,7 @@ export const useComments = (activityId?: string) => {
         .withAutomaticReconnect()
         .build();
 
+      // start the connection but don't block UI; sendComment will await if needed
       this.hubConnection
         .start()
         .catch((error) =>
@@ -52,6 +53,25 @@ export const useComments = (activityId?: string) => {
         this.hubConnection
           .stop()
           .catch((error) => console.log("Error stopping connection: ", error));
+      }
+    },
+
+    // Ensure connection is started and invoke SendComment on the server
+    async sendComment(activityId: string, body: string, rate: number) {
+      if (!this.hubConnection) {
+        throw new Error("No hub connection");
+      }
+
+      try {
+        if (this.hubConnection.state !== HubConnectionState.Connected) {
+          // await start to ensure connected before invoking
+          await this.hubConnection.start();
+        }
+
+        return await this.hubConnection.invoke("SendComment", activityId, body, rate);
+      } catch (err) {
+        console.error("Error invoking SendComment:", err);
+        throw err;
       }
     },
   }));

@@ -1,0 +1,217 @@
+@theme {
+  --color-transparent: "transparent";
+  --color-current: "currentColor";
+  --color-black: #0a0a0a;
+  --color-white: #ffffff;
+  --color-primary: #007595;
+  --color-blue: #003248;
+  --color-green: #00a63e;
+  --color-yellow: #ffd230;
+  --color-yellow-dark: #856404;
+  --color-yellow-light: #fff3cd;
+  --color-red: #ef6969;
+  --color-gray: #7f7f7f;
+  --color-gray-dark: #4a4a4a;
+  --color-gray-light: #f2f2f2;
+
+  --font-playfair: "Playfair Display", serif;
+  --font-switzer: "Switzer", sans-serif;
+
+  --breakpoint-2xl: 1568px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-md: 768px;
+  --breakpoint-sm: 640px;
+
+  --shadow-3xl: 0px 2px 4px 0px rgba(27, 28, 29, 0.04);
+  --shadow-4xl: 0px 16px 32px -12px rgba(88, 92, 95, 0.1);
+}
+
+@layer components {
+  .container {
+    @apply mx-auto w-full px-4;
+  }
+  .nav-links {
+    @apply hover:text-primary relative inline-flex items-center gap-2.5 rounded-full px-4 py-2.5 text-base/5.5 font-medium text-nowrap text-black duration-300 xl:text-white xl:hover:bg-white/40 xl:hover:text-black;
+  }
+  .nav-links.active {
+    @apply text-primary xl:bg-white xl:text-black;
+  }
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full bg-white px-4 py-2.5 text-base/5 font-medium whitespace-nowrap text-black transition hover:text-black/80 lg:text-lg/6 hover:[&>svg]:rotate-45;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:text-white/80;
+  }
+  .btn svg {
+    @apply size-5 shrink-0 p-px transition duration-300 lg:size-5.5;
+  }
+  .footer-links {
+    @apply inline bg-gradient-to-r from-white to-white bg-[length:0px_1px] bg-[left_100%] bg-no-repeat text-base/5.5 text-white transition-all duration-300 hover:bg-[length:100%_1px] hover:opacity-80 sm:whitespace-nowrap lg:hover:opacity-100;
+  }
+}
+@utility prose {
+  @apply text-gray-dark text-left;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mt-8 mb-4 font-medium text-black;
+  }
+  p {
+    @apply text-gray-dark mt-0 mb-4 text-base/5.25 lg:text-lg/6;
+  }
+
+  h3 {
+    @apply text-2xl/8;
+  }
+  h2 {
+    @apply [&_span]:font-playfair mt-6 text-3xl sm:text-4xl/12 lg:mt-8 lg:text-5xl/16 [&_span]:italic;
+  }
+  ul {
+    @apply mt-4;
+  }
+  ul > li {
+    @apply text-gray-dark marker:text-gray-dark mt-0 mb-0 ps-0 font-normal marker:text-base/5! lg:text-lg/6;
+  }
+  a {
+    @apply text-primary inline-block no-underline underline-offset-3 transition hover:underline lg:text-lg/6.5;
+  }
+  ol {
+    @apply list-none ps-0;
+  }
+  ol > li {
+    @apply mt-0 pl-0!;
+  }
+  blockquote {
+    @apply border-primary font-playfair bg-primary/60 my-8 border-l-8 p-6 text-xl leading-6.5 font-medium text-white;
+  }
+  img {
+    @apply h-75 w-full rounded-2xl object-cover lg:h-125;
+  }
+}
+.form-input,
+.form-textarea {
+  @apply border-gray-light focus:border-primary text-gray-dark placeholder:text-gray-dark w-full resize-none rounded-lg border-2 bg-[#F9F9F9] px-4 py-1.5 text-lg/6 font-normal shadow-none ring-0;
+}
+.form-input-2 {
+  @apply border-gray-light focus:border-primary w-full border-0 border-b-2 px-1 pt-0 pb-1 text-lg/6 font-normal text-black shadow-none ring-0 placeholder:text-black;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  @apply pointer-events-auto h-6 w-6 appearance-none;
+}
+
+.menu .nav-links {
+  @apply xl:hover:bg-primary/20 xl:text-black;
+}
+.menu .nav-links.active {
+  @apply xl:bg-primary xl:text-white;
+}
+
+button {
+  @apply cursor-pointer;
+}
+
+svg.lucide {
+  stroke: currentColor;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+.swiper-button-disabled {
+  @apply opacity-50!;
+}
+
+/* top-Experiences-table */
+.top-experiences-table tbody tr td {
+  @apply min-w-44 items-center border-b border-white/20 px-4 py-4 first:pl-0 last:w-0 last:min-w-0 last:px-0 lg:min-w-50 lg:py-6 xl:min-w-66 xl:px-6 xl:py-8;
+}
+
+.top-experiences-table.white-table tbody tr td {
+  @apply border-gray-light min-w-44 items-center border-b px-4 py-4 first:pl-0 last:w-0 last:min-w-0 last:px-0 lg:min-w-50 lg:py-6 xl:min-w-66 xl:px-6 xl:py-8;
+}
+
+.traveler-table thead tr th {
+  @apply text-gray border-gray-light border-b px-4 pb-4 text-left font-medium whitespace-nowrap lg:text-lg/6.5;
+}
+.traveler-table tbody {
+  @apply text-gray-dark text-left lg:text-lg/6.5;
+}
+
+.traveler-table tbody tr td {
+  @apply px-4 py-2 text-left whitespace-nowrap last:text-right;
+}
+
+.payment-invoice-table tbody tr td {
+  @apply border-gray-light border-b-2 px-4 py-3.5 text-left whitespace-nowrap first:w-0 first:pl-0 last:w-0 last:pr-0 last:text-right lg:text-lg/6;
+}
+
+/* Flatpickr */
+.flatpickr-wrapper {
+  @apply block!;
+}
+.flatpickr-calendar {
+  @apply z-30 mt-2 rounded-lg! border! border-gray-100! bg-white! shadow-none! lg:mt-4;
+}
+.flatpickr-day {
+  @apply grid! h-9! place-content-center! rounded-lg! leading-none!;
+}
+.flatpickr-day.selected {
+  @apply border-primary! bg-primary!;
+}
+.flatpickr-day.today:hover,
+.flatpickr-day.today:focus {
+  @apply bg-black/40!;
+}
+.flatpickr-day.endRange,
+.flatpickr-day.startRange,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay {
+  @apply hover:!bg-primary bg-primary! border-0! hover:!border-0;
+}
+.flatpickr-weekday {
+  @apply font-semibold!;
+}
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  @apply [&_svg]:fill-primary! [&_svg]:size-3! [&_svg]:hover:!text-black;
+}
+.flatpickr-months .flatpickr-prev-month:hover svg,
+.flatpickr-months .flatpickr-next-month:hover svg {
+  @apply fill-primary! transition;
+}
+.flatpickr-calendar .flatpickr-current-month {
+  @apply pt-1!;
+}
+.flatpickr-calendar:after,
+.flatpickr-calendar:before {
+  @apply hidden!;
+}
+.flatpickr-calendar .numInputWrapper .arrowUp,
+.flatpickr-calendar .numInputWrapper .arrowDown {
+  @apply hidden!;
+}
+
+@media (min-width: 1024px) {
+  .vertical-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed; /* Keeps letters horizontal */
+    transform: rotate(180deg); /* Rotates to mimic sideways-lr */
+    transform-origin: left; /* Adjusts the pivot for rotation */
+    display: inline-block; /* Prevent layout issues */
+  }
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.marquee-swiper .swiper-wrapper {
+  -webkit-transition-timing-function: linear !important;
+  transition-timing-function: linear !important;
+  position: relative;
+}

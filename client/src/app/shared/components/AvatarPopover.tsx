@@ -1,7 +1,5 @@
 import * as React from "react";
-import Popover from "@mui/material/Popover";
-import { useState } from "react";
-import { Avatar } from "@mui/material";
+import { useRef, useState } from "react";
 import { Link } from "react-router";
 import ProfileCard from "../../../features/profiles/ProfileCard";
 
@@ -10,50 +8,52 @@ type Props = {
 };
 
 export default function AvatarPopover({ profile }: Props) {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handlePopoverOpen = () => setOpen(true);
+  const handlePopoverClose = () => setOpen(false);
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
+  if (!profile) return <div>Profile not found</div>;
 
   return (
-    <>
-      <Avatar
-        alt={profile.displayName + " image"}
-        src={profile.imageUrl}
-        sx={{
-          border: profile.following ? 3 : 0,
-          borderColor: "secondary.main",
-        }}
-        component={Link}
+    <div className="relative inline-block" ref={wrapperRef}>
+      <Link
         to={`/profiles/${profile.id}`}
         onMouseEnter={handlePopoverOpen}
+        onFocus={handlePopoverOpen}
         onMouseLeave={handlePopoverClose}
-      />
-      <Popover
-        id="mouse-over-popover"
-        sx={{ pointerEvents: "none" }}
-        open={open}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
+        onBlur={handlePopoverClose}
+        className={`inline-block rounded-full overflow-hidden ${
+          profile.following ? "ring-4 ring-indigo-500" : ""
+        }`}
+        aria-haspopup="true"
+        aria-expanded={open}
       >
-        <ProfileCard profile={profile} />
-      </Popover>
-    </>
+        {profile.imageUrl ? (
+          <img
+            src={profile.imageUrl}
+            alt={`${profile.displayName} image`}
+            className="w-10 h-10 object-cover rounded-full"
+          />
+        ) : (
+          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-sm text-white">
+            {profile.displayName?.[0]?.toUpperCase()}
+          </div>
+        )}
+      </Link>
+
+      {open && (
+        <div
+          id="profile-popover"
+          role="dialog"
+          className="absolute left-0 top-full mt-2 z-50 pointer-events-auto"
+          onMouseEnter={handlePopoverOpen}
+          onMouseLeave={handlePopoverClose}
+        >
+          <ProfileCard profile={profile} />
+        </div>
+      )}
+    </div>
   );
 }

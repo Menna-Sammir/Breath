@@ -1,16 +1,17 @@
 import { createBrowserRouter, Navigate } from "react-router";
 import App from "../layout/App";
-import HomePage from "../../features/activities/home/homepage";
+import HomePage from "../../features/home/homepage";
 import ActivityDashboard from "../../features/activities/dashboard/ActivityDashboard";
 import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetailPage from "../../features/activities/details/ActivityDetailPage";
 import TestErrors from "../../features/errors/TestErrors";
 import NotFound from "../../features/errors/NotFound";
 import ServerError from "../../features/errors/ServerError";
-import LoginForm from "../../features/account/LoginForm";
 import RequiredAuth from "./RequiredAuth";
-import RegisterForm from "../../features/account/RegisterForm";
 import ProfilePage from "../../features/profiles/ProfilePage";
+import VerifyEmail from "../../features/account/VerifyEmail";
+import LoginPage from "../../features/account/LoginPage";
+import RegisterPage from "../../features/account/RegisterPage";
 
 export const router = createBrowserRouter([
   {
@@ -61,11 +62,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "login",
-        element: <LoginForm />,
+        element: <LoginPage />,
       },
       {
         path: "register",
-        element: <RegisterForm />,
+        element: <RegisterPage />,
+      },
+      {
+        path: "confirm-email",
+        element: <VerifyEmail />,
       },
       {
         path: "*",

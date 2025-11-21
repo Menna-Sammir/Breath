@@ -1,5 +1,4 @@
-import { Box, Paper, Tab, Tabs } from "@mui/material";
-import { SyntheticEvent, useState } from "react"
+import { useState } from "react";
 import ProfilePhotos from "./ProfilePhotos";
 import ProfileAbout from "./ProfileAbout";
 import ProfileActivities from "./ProfileActivities";
@@ -8,40 +7,45 @@ import ProfileFollowings from "./ProfileFollowings";
 export default function ProfileContent() {
   const [value, setValue] = useState(0);
 
-  const handleChange = (_: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  }
-
   const tabContent = [
-    {label: 'About', content: <ProfileAbout />},
-    {label: 'Photos', content: <ProfilePhotos />},
-    {label: 'Events', content: <ProfileActivities />},
-    {label: 'Followings', content: <ProfileFollowings activeTab={value} />},
-    {label: 'Followers', content: <ProfileFollowings activeTab={value} />}
+    { label: "About", content: <ProfileAbout /> },
+    { label: "Photos", content: <ProfilePhotos /> },
+    { label: "Events", content: <ProfileActivities /> },
+    {
+      label: "Followings",
+      content: <ProfileFollowings type="followings" />,
+    },
+    {
+      label: "Followers",
+      content: <ProfileFollowings type="followers" />,
+    },
   ];
 
   return (
-    <Box
-      component={Paper}
-      mt={2}
-      p={3}
-      elevation={3}
-      height={500}
-      sx={{display: 'flex', alignItems: 'flex-start', borderRadius: 3}}
-    >
-      <Tabs
-        orientation="vertical"
-        value={value}
-        onChange={handleChange}
-        sx={{borderRight: 1, height: 450, minWidth: 200}}
-      >
+    <div className="flex mt-4 p-6 bg-white shadow-lg rounded-2xl h-[500px]">
+      {/* Tabs Sidebar */}
+      <div className="flex flex-col border-r pr-4 min-w-[200px]">
         {tabContent.map((tab, index) => (
-          <Tab key={index} label={tab.label} sx={{mr: 3}} />
+          <button
+            key={index}
+            className={`text-left mb-3 px-4 py-2 rounded-lg transition-all
+              ${value === index ? "bg-blue-500 text-white font-semibold" : "hover:bg-gray-100"}
+            `}
+            onClick={() => setValue(index)}
+          >
+            {tab.label}
+          </button>
         ))}
-      </Tabs>
-      <Box sx={{flexGrow: 1, p: 3, pt: 0}}>
-        {tabContent[value].content}
-      </Box>
-    </Box>
-  )
+      </div>
+
+      {/* Tab Content */}
+      <div className="flex-grow p-4 pt-0 overflow-auto">
+        {tabContent.map((tab, index) => (
+          <div key={index} className={value === index ? "block" : "hidden"}>
+            {tab.content}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

@@ -1,4 +1,3 @@
-import { MenuItem } from "@mui/material";
 import { NavLink } from "react-router";
 
 interface MenuItemLinkProps {
@@ -8,12 +7,15 @@ interface MenuItemLinkProps {
 
 export default function MenuItemLink({ children, to }: MenuItemLinkProps) {
   return (
-    <MenuItem
-      component={NavLink}
+    <NavLink
       to={to}
-      sx={{ color: "inherit", "&.active": { color: "yellow" } }}
+      className={({ isActive }) =>
+        `block px-4 py-2 text-current hover:bg-gray-100 ${
+          isActive ? "text-yellow-400" : ""
+        }`
+      }
     >
       {children}
-    </MenuItem>
+    </NavLink>
   );
 }

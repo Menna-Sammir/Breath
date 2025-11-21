@@ -13,6 +13,12 @@ import { store, storesContext } from "./lib/stores/store";
 import { ToastContainer } from "react-toastify";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "./assets/css/tailwind.css";
+import "./assets/css/style.css";
+import "flatpickr/dist/flatpickr.min.css";
 
 const queryClient = new QueryClient();
 

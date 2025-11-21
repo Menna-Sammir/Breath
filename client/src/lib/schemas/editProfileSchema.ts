@@ -1,5 +1,5 @@
 import {z} from "zod";
-import {requiredString} from "../util/util.ts";
+import {requiredString} from "../utils/utils.ts";
 
 export const editProfileSchema = z.object({
     displayName: requiredString('Display Name'),

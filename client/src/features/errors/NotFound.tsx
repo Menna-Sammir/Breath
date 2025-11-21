@@ -1,10 +1,10 @@
-import { SearchOff } from "@mui/icons-material";
+import { Search } from "lucide-react";
 import { Button, Paper, Typography } from "@mui/material";
 
 export default function NotFound() {
   return (
     <Paper elevation={3} sx={{ padding: 4, textAlign: "center" }}>
-      <SearchOff fontSize="large" color="primary" />
+      <Search className="text-primary mb-2" size={48} />
       <Typography variant="h4" gutterBottom>
         Oops! Page Not Found
       </Typography>

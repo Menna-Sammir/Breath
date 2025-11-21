@@ -21,7 +21,7 @@ agent.interceptors.request.use((config) => {
 
 agent.interceptors.response.use(
   async (response) => {
-    await sleep(1000);
+    if (import.meta.env.DEV) await sleep(1000);
     store.uiStore.isIdle();
     return response;
   },
@@ -44,7 +44,11 @@ agent.interceptors.response.use(
         }
         break;
       case 401:
-        toast.error("Unauthorized - Please log in");
+        if (data.message === "NotAllowed") {
+          throw new Error(data.detail);
+        }
+          toast.error("Unauthorized - Please log in");
+
         break;
       case 403:
         toast.error(
