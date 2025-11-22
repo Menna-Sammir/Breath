@@ -31,6 +31,7 @@ type Activity = {
   hostImageUrl?: string;
   departureCity?: string;
   departureVenue?: string;
+  eventPhotoUrl?: string;
 };
 
 type Profile = {

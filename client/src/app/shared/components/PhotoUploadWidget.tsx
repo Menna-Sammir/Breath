@@ -7,9 +7,11 @@ import "cropperjs/dist/cropper.css";
 type Props = {
   uploadPhoto: (file: Blob) => void;
   loading: boolean;
+  hSize?: number;
+  wSize?: number;
 };
 
-export default function PhotoUploadWidget({ uploadPhoto, loading }: Props) {
+export default function PhotoUploadWidget({ uploadPhoto, loading, hSize, wSize }: Props) {
   const [files, setFiles] = useState<object & { preview: string }[]>([]);
   const cropperRef = useRef<ReactCropperElement>(null);
 
@@ -60,7 +62,7 @@ export default function PhotoUploadWidget({ uploadPhoto, loading }: Props) {
           <div className="flex justify-center">
             <Cropper
               src={files[0]?.preview}
-              style={{ height: 300, width: "90%" }}
+              style={{ height: hSize, width: wSize }}
               initialAspectRatio={1}
               aspectRatio={1}
               preview=".img-preview"

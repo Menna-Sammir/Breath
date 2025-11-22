@@ -78,7 +78,6 @@ export const useReviews = (id?: string) => {
   } = useQuery({
     queryKey: ["reviews-summary", id],
     queryFn: async () => {
-      console.log("id in useReviews",id);
       const response = await agent.get<ReviewsSummary>(
         `/reviews/${id}/summary`
       );

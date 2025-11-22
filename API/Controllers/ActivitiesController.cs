@@ -2,6 +2,7 @@ using Application.Activities.Commands;
 using Application.Activities.DTOs;
 using Application.Activities.Queries;
 using Application.Core;
+using Application.Profiles.Commands;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,45 @@ namespace API.Controllers
         {
             return HandlerResult(
                 await Mediator.Send(new UpdateAttendance.Command { Id = Guid.Parse(id) })
+            );
+        }
+
+        [HttpPost("{id}/add-photo")]
+        public async Task<ActionResult<Photo>> AddPhoto(string id, IFormFile file)
+        {
+            return HandlerResult(
+                await Mediator.Send(
+                    new AddPhoto.Command { File = file, ActivityId = Guid.Parse(id) }
+                )
+            );
+        }
+
+        [HttpGet("{id}/photos")]
+        public async Task<ActionResult<List<Photo>>> GetPhotosForActivity(
+            [FromRoute(Name = "id")] string ActivityId
+        )
+        {
+            Console.WriteLine("GetPhotosForActivity called with ActivityId: " + ActivityId);
+            return HandlerResult(
+                await Mediator.Send(
+                    new GetActivityPhotos.Query { ActivityId = Guid.Parse(ActivityId) }
+                )
+            );
+        }
+
+        [HttpPut("{activityId}/set-photo/{id}")]
+        public async Task<ActionResult> SetEventPhoto(
+            string id,
+            [FromRoute(Name = "activityId")] string activityId
+        )
+        {
+            Console.WriteLine(
+                $"SetEventPhoto called with PhotoId: {id} and ActivityId: {activityId}"
+            );
+            return HandlerResult(
+                await Mediator.Send(
+                    new SetEventPhoto.Command { PhotoId = id, ActivityId = Guid.Parse(activityId) }
+                )
             );
         }
     }

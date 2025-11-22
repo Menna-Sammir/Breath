@@ -8,9 +8,10 @@ import TopSection from "../dashboard/TopSection";
 import Tabs from "./tabs";
 import { useState } from "react";
 import LocationDetails from "./LocationDetails";
-import { ReviewsSummary } from "./reviews-summary";
+import { ReviewsSummary } from "./reviewsSummary";
 import ReviewsList from "./ReviewsList";
-import { AddReviewForm } from "./add-review-form";
+import { AddReviewForm } from "./addReviewForm";
+import ActivityPhotos from "./ActivityPhotos";
 
 export default function ActivityDetailPage() {
   const [activeTab, setActiveTab] = useState("summary");
@@ -29,7 +30,10 @@ export default function ActivityDetailPage() {
 
         <div>
           <TopSection
-            backgroundImage={`/images/categoryImages/${activity.category}.jpg`}
+            backgroundImage={
+              `${activity.eventPhotoUrl}` ||
+              `/images/categoryImages/${activity.category}.jpg`
+            }
             title={activity.title}
             subtitle={`Unforgettable adventures await — Hosted by ${activity?.hostDisplayName}`}
           />
@@ -67,13 +71,7 @@ export default function ActivityDetailPage() {
 
                 {activeTab === "gallery" && (
                   <div className="lg:col-span-2 space-y-12">
-                    {/* Gallery Content */}
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                      Gallery
-                    </h2>
-                    <p className="text-gray-700 leading-relaxed">
-                      Gallery content goes here...
-                    </p>
+                    <ActivityPhotos />
                   </div>
                 )}
 
@@ -88,7 +86,6 @@ export default function ActivityDetailPage() {
 
                       {/* Summary and List Section */}
                       <div className="grid grid-cols-1 gap-8">
-
                         <div className="lg:col-span-1">
                           <ReviewsSummary />
                         </div>

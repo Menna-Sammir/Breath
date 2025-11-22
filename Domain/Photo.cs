@@ -8,8 +8,14 @@ public class Photo
     public required string Url { get; set; }
     public required string PublicId { get; set; }
 
+    [JsonIgnore]
+    public Guid? ActivityId { get; set; }
+
     public required string UserId { get; set; }
 
     [JsonIgnore]
     public User User { get; set; } = null!;
+
+    [JsonIgnore]
+    public Activity? Activity { get; set; }
 }

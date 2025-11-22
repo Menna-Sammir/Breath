@@ -12,6 +12,7 @@ public class AddPhoto
     public class Command : IRequest<Result<Photo>>
     {
         public required IFormFile File { get; set; }
+        public Guid? ActivityId { get; set; }
     }
 
     public class Handler(
@@ -34,6 +35,7 @@ public class AddPhoto
                 Url = uploadResult.Url,
                 PublicId = uploadResult.PublicId,
                 UserId = user.Id,
+                ActivityId = request.ActivityId ?? Guid.Empty,
             };
             user.ImageUrl ??= photo.Url;
 

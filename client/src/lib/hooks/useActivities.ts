@@ -1,8 +1,14 @@
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import agent from "../api/agent";
 import { useAccount } from "./useAccounts";
 import { useStore } from "./useStore";
 import type { FieldValues } from "react-hook-form";
+import { useMemo } from "react";
 
 export const useActivities = (id?: string) => {
   const {
@@ -87,9 +93,7 @@ export const useActivities = (id?: string) => {
 
   const createdActivity = useMutation({
     mutationFn: async (activity: FieldValues) => {
-      console.log("activity", activity);
       const response = await agent.post<Activity>("/activities", activity);
-      console.log("response", response.data);
       return response.data;
     },
     onSuccess: async () => {
@@ -164,6 +168,101 @@ export const useActivities = (id?: string) => {
     },
   });
 
+  const uploadPhoto = useMutation({
+    mutationFn: async (file: Blob) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await agent.post<Photo>(
+        `/activities/${id}/add-photo`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      return response.data;
+    },
+    onSuccess: async (photo: Photo) => {
+      await queryClient.invalidateQueries({ queryKey: ["photos", id] });
+
+      queryClient.setQueryData<Activity>(
+        ["activities", id],
+        (data: Activity | undefined) => {
+          if (data) {
+            return { ...data, eventPhotoUrl: data.eventPhotoUrl ?? photo.url };
+          }
+          return data;
+        }
+      );
+
+      queryClient.setQueryData<Activity>(
+        ["activities", id],
+        (data: Activity | undefined) => {
+          if (data) {
+            return { ...data, eventPhotoUrl: data.eventPhotoUrl ?? photo.url };
+          }
+          return data;
+        }
+      );
+    },
+  });
+
+  const setEventPhoto = useMutation({
+    mutationFn: async (photo: Photo) => {
+      await agent.put(`/activities/${id}/set-photo/${photo.id}`);
+    },
+    onSuccess: async (_, photo) => {
+      queryClient.setQueryData<Activity>(
+        ["activities"],
+        (data: Activity | undefined) => {
+          if (data) {
+            return { ...data, eventPhotoUrl: data.eventPhotoUrl ?? photo.url };
+          }
+          return data;
+        }
+      );
+      queryClient.setQueryData<Activity>(
+        ["activities", id],
+        (data: Activity | undefined) => {
+          if (data) {
+            return { ...data, eventPhotoUrl: data.eventPhotoUrl ?? photo.url };
+          }
+          return data;
+        }
+      );
+    },
+  });
+
+  const { data: photos, isLoading: loadingPhotos } = useQuery<Photo[]>({
+    queryKey: ["photos", id],
+    queryFn: async () => {
+      const response = await agent.get(`/activities/${id}/photos`);
+      return response.data;
+    },
+    enabled: !!id,
+  });
+
+  const deletePhoto = useMutation({
+    mutationFn: async (photoId: string) => {
+      await agent.delete(`/profiles/${photoId}/photos`);
+    },
+    onSuccess: async (_, photoId) => {
+      await queryClient.setQueryData<Photo[]>(["photos", id], (photos) => {
+        if (photos) {
+          return photos.filter((photo) => photo.id !== photoId);
+        }
+        return photos;
+      });
+    },
+  });
+
+  const isHostUser = useMemo(() => {
+    if (!id) return false;
+    const activity = queryClient.getQueryData<Activity>(["activity", id]);
+    return activity?.hostId === currentUser?.id;
+  }, [id, queryClient, currentUser]);
+
   return {
     activitiesGroup,
     isFetchingNextPage,
@@ -176,5 +275,11 @@ export const useActivities = (id?: string) => {
     activity,
     isLoadingActivity,
     updateAttendance,
+    uploadPhoto,
+    photos,
+    loadingPhotos,
+    deletePhoto,
+    setEventPhoto,
+    isHostUser,
   };
 };

@@ -19,6 +19,8 @@ namespace Domain
         public string? DeparturePlace { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string? EventPhotoUrl { get; set; }
+        public ICollection<Photo> Photos { get; set; } = [];
 
         public ICollection<ActivityAttendee> Attendees { get; set; } = [];
 

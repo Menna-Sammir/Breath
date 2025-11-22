@@ -1,4 +1,4 @@
-import { ReviewCard } from "./review-card";
+import { ReviewCard } from "./reviewCard";
 import { useReviews } from "../../../lib/hooks/useReviews";
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";

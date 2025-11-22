@@ -24,6 +24,8 @@ public class ActivityDto
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 
+    public string? EventPhotoUrl { get; set; }
+
     // navigation properties
     public ICollection<UserProfile> Attendees { get; set; } = [];
 }
