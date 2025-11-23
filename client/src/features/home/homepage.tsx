@@ -1,10 +1,8 @@
 import { Link } from "react-router";
 import HeroSection from "./HeroSection";
 import { MoveUpRight } from "lucide-react";
-import PopularExperiencesCarousel from "./PopularExperiencesCarousel";
 import GlobalDestinationsCarousel from "./GlobalDestinationsCarousel";
 import ChooseUs from "./ChooseUs";
-import TopRatedSection from "./TopRatedSection";
 import TopExperiences from "./TopExpriences";
 import FAQSection from "./FAQSection";
 import { CTAbanner } from "../../assets/images";
@@ -16,10 +14,10 @@ export default function homepage() {
         <HeroSection />
         <GlobalDestinationsCarousel />
         <ChooseUs />
-        <PopularExperiencesCarousel />
+        {/* <PopularExperiencesCarousel /> */}
 
         {/* Top Packages Section */}
-        <TopRatedSection />
+        {/* <TopRatedSection /> */}
         <TopExperiences />
         <FAQSection />
 

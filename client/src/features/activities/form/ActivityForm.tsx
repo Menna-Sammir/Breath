@@ -44,6 +44,7 @@ export default function ActivityForm() {
         ...activity,
         location: {
           city: activity.city,
+          country: activity.country,
           venue: activity.venue,
           latitude: activity.latitude,
           longitude: activity.longitude,

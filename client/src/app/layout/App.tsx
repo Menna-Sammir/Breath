@@ -3,6 +3,7 @@ import {
   ScrollRestoration,
   useLocation,
   useNavigation,
+  useOutlet,
 } from "react-router";
 import "./App.css";
 import NavBar from "./NavBar";
@@ -13,6 +14,7 @@ import { useStore } from "../../lib/stores/store";
 import { useIsFetching } from "@tanstack/react-query";
 import Footer from "./Footer";
 import { useEffect, useState } from "react";
+import NotFound from "../../features/errors/NotFound";
 
 function App() {
   const location = useLocation();
@@ -33,7 +35,7 @@ function App() {
         if (showLoading) {
           setDelayedLoading(true);
         }
-      }, 2000); // delay 2 seconds
+      }, 500); // delay 0.5 second
     } else {
       setDelayedLoading(false);
     }
@@ -41,8 +43,10 @@ function App() {
     return () => clearTimeout(timer);
   }, [showLoading]);
 
+  const outlet = useOutlet();
+
   return (
-    <div className="bg-[#eeeeee] min-h-screen">
+    <div className="bg-[#eeeeee] min-h-screen flex flex-col">
       {delayedLoading && <LoadingPage />}
 
       <ScrollRestoration />
@@ -51,13 +55,17 @@ function App() {
         location.pathname
       ) && <NavBar />}
 
-      {location.pathname === "/" ? (
-        <HomePage />
-      ) : (
-        <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-full">
-          <Outlet />
-        </div>
-      )}
+      <main className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-full flex-1 px-0 py-0 mx-auto">
+        {location.pathname === "/" ? (
+          <HomePage />
+        ) : outlet ? (
+          <div className="w-full">
+            <Outlet />
+          </div>
+        ) : (
+          <NotFound />
+        )}
+      </main>
 
       <Footer />
     </div>

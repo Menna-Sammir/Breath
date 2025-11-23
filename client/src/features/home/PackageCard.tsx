@@ -81,7 +81,7 @@ const PackageCard = ({
           </div>
         </div>
         <Link
-          to="/package-details.html"
+          to="#"
           className="group/detail text-primary inline-flex w-fit items-center gap-2 font-medium hover:opacity-80 lg:text-lg/6"
         >
           View Details

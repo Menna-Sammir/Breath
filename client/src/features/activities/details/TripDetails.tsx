@@ -10,7 +10,7 @@ export default function TripDetails({ activity }: Props) {
     {
       icon: MapPin,
       label: "Destination",
-      value: `${activity.city}, ${activity.venue}`,
+      value: `${activity.city}, ${activity.country}`,
     },
     {
       icon: Plane,

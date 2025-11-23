@@ -1,27 +1,50 @@
 import React, { useState } from "react";
-import { ChevronDown, Search} from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import HeroCarousel from "./HeroCarousel";
 import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import { useNavigate } from "react-router";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
   const [from, setFrom] = useState("Berlin");
   const [to, setTo] = useState("Paris");
   const [fromOpen, setFromOpen] = useState(false);
   const [toOpen, setToOpen] = useState(false);
   const [tripDuration, setTripDuration] = useState("3-5 Days");
   const [durationOpen, setDurationOpen] = useState(false);
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | null>(tomorrow);
 
   const cities = ["New York", "Toronto", "Tokyo", "London", "Paris", "Berlin"];
   const durations = ["1-3 Days", "3-5 Days", "5+ Days"];
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Build query parameters
+    const params = new URLSearchParams();
+
+    if (to) {
+      params.append("city", to);
+    }
+
+    if (date) {
+      params.append("startDate", date.toISOString());
+    }
+
+    // Navigate to activities page with filters
+    navigate(`/activities?${params.toString()}`);
+  };
 
   return (
     <div className="relative">
       <HeroCarousel />
 
       <div className="relative z-20 container pt-40 pb-10 lg:pt-60 xl:pt-70.5">
-        <h1 className="mx-auto mb-6 max-w-220 text-center text-[26px]/9 text-white sm:mb-10 sm:text-4xl/10 lg:mb-16 lg:px-10 lg:text-5xl/15 xl:text-[56px]/19 2xl:px-0">
+        <h1 className="mx-auto mb-6 max-w-220 text-center text-[26px]/9 text-white sm:mb-10 sm:text-4xl/10 lg:mb-16 lg:px-10 lg:text-5xl/15 xl:text-[56px]/19 2xl:px-0 font-playfair font-medium italic">
           Wander beyond the
           <span className="font-playfair font-medium italic">bucket list.</span>
           Discover
@@ -32,7 +55,10 @@ const HeroSection = () => {
           </span>
         </h1>
 
-        <form className="relative z-20 flex w-full flex-col gap-6 rounded-2xl bg-white px-4 py-5 sm:px-8 lg:mx-auto lg:max-w-253 lg:flex-row lg:items-center lg:rounded-full lg:py-4 xl:gap-6">
+        <form
+          onSubmit={handleSearch}
+          className="relative z-20 flex w-full flex-col gap-6 rounded-2xl bg-white px-4 py-5 sm:px-8 lg:mx-auto lg:max-w-253 lg:flex-row lg:items-center lg:rounded-full lg:py-4 xl:gap-6"
+        >
           <div className="flex grow flex-col gap-3 lg:flex-row lg:gap-4 xl:gap-6">
             {/* From */}
             <div className="w-full space-y-1 lg:max-w-35 lg:space-y-2">
@@ -113,9 +139,10 @@ const HeroSection = () => {
                   x-ref="picker"
                   id="picker"
                   x-model="value"
-                  type="date"
                   value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  onChange={(selectedDates) =>
+                    setDate(selectedDates[0] || null)
+                  }
                 />
                 <ChevronDown className="absolute top-1/2 right-0 -z-1 size-4.5 shrink-0 -translate-y-1/2" />
               </div>
@@ -157,9 +184,8 @@ const HeroSection = () => {
           </div>
 
           <button
-            type="button"
+            type="submit"
             className="btn btn-primary hover:[&>svg]:rotate-0"
-            onClick={(e) => e.preventDefault()}
           >
             <Search />
             Search

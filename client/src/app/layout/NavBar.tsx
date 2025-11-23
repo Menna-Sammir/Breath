@@ -1,5 +1,4 @@
 import { Link, NavLink } from "react-router";
-import MenuItemLink from "../shared/components/MenuItemLink";
 import { useStore } from "../../lib/hooks/useStore";
 import UserMenu from "./UserMenu";
 import { useAccount } from "../../lib/hooks/useAccounts";
@@ -7,6 +6,7 @@ import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { Menu, X, MoveUpRight, LoaderCircle } from "lucide-react";
 import { Observer } from "mobx-react-lite";
+import { logo, logoLight } from "../../assets/images";
 
 
 export default function NavBar() {
@@ -24,52 +24,6 @@ export default function NavBar() {
   }, []);
 
   return (
-    // <Box sx={{ flexGrow: 1 }}>
-    //   <LinkppBar
-    //     position="fixed"
-    //     sx={{
-    //       backgroundImage:
-    //         "linear-gradient(135deg, #182a73 0%, #218aae 69%, #20a7ac 89%)",
-    //     }}
-    //   >
-    //     <Container maxWidth="xl">
-    //       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-    //         <Box>
-    //           <MenuItem
-    //             component={NavLink}
-    //             to="/"
-    //             sx={{ display: "flex", gap: 2 }}
-    //           >
-    //             <Group fontSize="large" />
-    //             <Typography
-    //               sx={{ position: "relative" }}
-    //               variant="h4"
-    //               fontWeight="bold"
-    //             >
-    //               Reactivities
-    //             </Typography>
-
-    //           </MenuItem>
-    //         </Box>
-    //         <Box sx={{ display: "flex" }}>
-    //           <MenuItemLink to="/activities">Activities</MenuItemLink>
-    //           <MenuItemLink to="/counter">Counter</MenuItemLink>
-    //           <MenuItemLink to="/errors">Errors</MenuItemLink>
-    //         </Box>
-    //         <Box display="flex" alignItems="center">
-    //           {currentUser ? (
-    //             <UserMenu />
-    //           ) : (
-    //             <>
-    //               <MenuItemLink to="/login">Login</MenuItemLink>
-    //               <MenuItemLink to="/register">Register</MenuItemLink>
-    //             </>
-    //           )}
-    //         </Box>
-    //       </Toolbar>
-    //     </Container>
-    //   </AppBar>
-    // </Box>
     <>
       <header
         className={clsx(
@@ -92,11 +46,11 @@ export default function NavBar() {
             <img
               src={
                 isScrolled
-                  ? "/assets/images/logo-black.svg"
-                  : "/assets/images/logo.svg"
+                  ? logo
+                  : logoLight
               }
               alt="logo"
-              className="h-8 w-auto sm:h-9.5"
+              className=" w-auto h-20"
             />
           </Link>
 
@@ -110,7 +64,7 @@ export default function NavBar() {
             <div className="sticky top-0 z-50 flex shrink-0 justify-between bg-white p-5 shadow-2xs backdrop-blur-xs xl:hidden xl:p-0">
               <Link to="/" className="inline-flex">
                 <img
-                  src="/assets/images/logo-black.svg"
+                  src={logo}
                   alt="logo"
                   className="h-8.5 w-auto"
                 />
@@ -133,13 +87,13 @@ export default function NavBar() {
             >
               {[
                 ["Home", "/"],
-                ["Destination", "/destination.html"],
-                ["Experiences", "/experiences.html"],
-                ["Tours & Packages", "/tours-packages.html"],
-                ["About", "/about-us.html"],
-                ["Blog", "/blog.html"],
-                ["Contact", "/contact-us.html"],
-                ["FAQs", "/faqs.html"],
+                ["Destination", "activities"],
+                ["Experiences", "#"],
+                ["Tours & Packages", "#"],
+                ["About", "#"],
+                ["Blog", "#"],
+                ["Contact", "#"],
+                ["FAQs", "#"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <Link

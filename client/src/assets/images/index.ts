@@ -1,8 +1,12 @@
-import banner1 from "./hero-banner1.jpg";
-import banner2 from "./hero-banner2.jpg";
-import banner3 from "./hero-banner3.jpg";
+import banner3 from "./DSC00897.webp";
+import banner2 from "./banner2.jpg";
+import banner1 from "./dahab-1.jpg";
+
+
+
 import footerBanner from "./footer-banner.jpg";
-import logo from "./logo.svg";
+import logo from "./logo.png";
+import logoLight from "./logo-light.png";
 import topPackages1 from "./top-packages1.jpg";
 import topPackages2 from "./top-packages2.jpg";
 import topPackages3 from "./top-packages3.jpg";
@@ -32,6 +36,7 @@ import CTAbanner from "./cta-banner.jpg";
 import mountainTrip from "./mountain-trip.jpg";
 import aboutBanner from "./about-banner.jpg";
 import loginImage from "./hero-travelers.jpg";
+import background from "./bg-ground.jpg";
 
 export {
   banner1,
@@ -68,4 +73,6 @@ export {
   aboutBanner,
   CTAbanner,
   loginImage,
+  logoLight,
+  background,
 };

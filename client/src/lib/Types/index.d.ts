@@ -19,6 +19,7 @@ type Activity = {
   duration: string;
   isCancelled: boolean;
   city: string;
+  country: string;
   venue: string;
   latitude: number;
   longitude: number;

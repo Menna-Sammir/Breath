@@ -2,9 +2,14 @@ import ActivityList from "./ActivityList";
 import { mountainTrip } from "../../../assets/images";
 import TopSection from "./TopSection";
 import FiltersSidebar from "./FiltersSidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+import { useStore } from "../../../lib/hooks/useStore";
 
 export default function ActivityDashboard() {
+  const [searchParams] = useSearchParams();
+  const { activityStore } = useStore();
+
   const [filters, setFilters] = useState({
     destination: "",
     priceRange: [0, 5000],
@@ -14,9 +19,21 @@ export default function ActivityDashboard() {
     experiences: [],
   });
 
-  const handleFilterChange = (newFilters: any) => {
-    setFilters(newFilters);
-  };
+  useEffect(() => {
+    const cityParam = searchParams.get("city");
+    const startDateParam = searchParams.get("startDate");
+
+    if (cityParam) {
+      activityStore.setCity(cityParam);
+      setFilters((prev) => ({ ...prev, destination: cityParam }));
+    }
+
+    if (startDateParam) {
+      const date = new Date(startDateParam);
+      activityStore.setStartDate(date);
+    }
+  }, [searchParams, activityStore]);
+
 
   return (
     <div className="grow">
@@ -32,7 +49,6 @@ export default function ActivityDashboard() {
         {/* Left Sidebar */}
         <div className="lg:w-1/4 sticky top-28 self-start">
           <FiltersSidebar />
-          {/* <ActivityFilters onFilterChange={handleFilterChange} /> */}
         </div>
 
         {/* Center Content */}

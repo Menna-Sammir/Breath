@@ -67,12 +67,13 @@ export default function LocationInput<T extends FieldValues>(props: Props<T>) {
       location.address?.city ||
       location.address?.town ||
       location.address?.village;
+    const country = location.address?.country;
     const venue = location.display_name;
     const latitude = location.lat;
     const longitude = location.lon;
 
     setInputValue(venue);
-    field.onChange({ city, venue, latitude, longitude });
+    field.onChange({ city, venue, latitude, longitude, country });
     setSuggestions([]);
   };
   return (

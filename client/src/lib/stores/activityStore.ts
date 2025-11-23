@@ -6,6 +6,7 @@ export class ActivityStore {
   city: string = "";
   minPrice: number | null = null;
   maxPrice: number | null = null;
+  duration: string = "";
 
   constructor() {
     makeAutoObservable(this);
@@ -34,5 +35,9 @@ export class ActivityStore {
   setPriceRange = (min: number | null, max: number | null) => {
     this.minPrice = min;
     this.maxPrice = max;
+  };
+
+  setDuration = (duration: string) => {
+    this.duration = duration;
   };
 }

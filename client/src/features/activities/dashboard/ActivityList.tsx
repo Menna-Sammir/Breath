@@ -3,10 +3,16 @@ import { useActivities } from "../../../lib/hooks/useActivities";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { observer } from "mobx-react-lite";
+import { LoaderCircle } from "lucide-react";
 
 const ActivityList = observer(function ActivityList() {
-  const { activitiesGroup, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useActivities();
+  const {
+    activitiesGroup,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useActivities();
   const { ref, inView } = useInView({
     threshold: 0,
     rootMargin: "200px",
@@ -39,8 +45,10 @@ const ActivityList = observer(function ActivityList() {
         </div>
       ))}
       {/* sentinel element observed for infinite scroll */}
-      <div ref={ref} className="h-1" />
-      {isFetchingNextPage && <h4>Loading more...</h4>}
+      <div ref={ref} className="h-1 flex justify-center" />
+      {isFetchingNextPage && (
+        <LoaderCircle className="h-6 w-6 animate-spin text-primary" />
+      )}
       {!activitiesGroup && <h3>No activities found</h3>}
     </div>
   );

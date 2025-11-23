@@ -8,6 +8,7 @@ import {
   destinations4,
   destinations5,
 } from "../../assets/images";
+import { Link } from "react-router";
 
 const GlobalDestinationsCarousel = () => {
   const destinations = [
@@ -53,10 +54,10 @@ const GlobalDestinationsCarousel = () => {
       <div className="container">
         <div className="mb-8 flex flex-wrap items-end justify-between gap-5 lg:mb-12">
           <div className="space-y-3 lg:space-y-4">
-            <span className="inline-block rounded-full bg-white/20 px-3 py-1.5 text-sm text-white lg:px-4 lg:py-2.5 lg:text-lg/6">
+            <span className="inline-block rounded-full bg-white/20 px-3 py-1.5 text-sm text-white lg:px-4 lg:py-2.5 lg:text-lg/6 ">
               Top Global Destinations
             </span>
-            <h2 className="w-full max-w-185.75 text-2xl font-medium text-white sm:text-3xl lg:text-4xl/11 xl:text-5xl/16">
+            <h2 className="w-full max-w-185.75 text-2xl font-medium text-white sm:text-3xl lg:text-4xl/11 xl:text-5xl/16 font-playfair italic">
               Explore <span className="font-playfair italic">iconic</span>{" "}
               places
               <span className="block">
@@ -121,13 +122,13 @@ const GlobalDestinationsCarousel = () => {
                           {dest.city}
                         </h3>
                         <p className="line-clamp-2">{dest.description}</p>
-                        <a
-                          href="/destination-packages.html"
+                        <Link
+                          to={`/activities?city=${encodeURIComponent(dest.city.split(",")[0])}`}
                           className="btn w-full justify-between"
                         >
                           Explore {dest.city.split(",")[0]}
                           <MoveUpRight />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>

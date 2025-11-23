@@ -19,6 +19,7 @@ export default function ActivityDetailPage() {
   const { id } = useParams<{ id: string }>();
   const { activity, isLoadingActivity } = useActivities(id);
 
+
   if (isLoadingActivity) return <div>Loading activity...</div>;
 
   if (!activity) return <div>Activity not found</div>;
