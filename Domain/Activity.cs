@@ -9,11 +9,12 @@ namespace Domain
         public Guid Id { get; set; } = Guid.NewGuid();
         public required string Title { get; set; }
         public DateTime Date { get; set; }
-        public required string Duration { get; set; }
+        public int Duration { get; set; }
         public decimal Price { get; set; }
         public required string Description { get; set; }
         public required string Category { get; set; }
         public bool IsCancelled { get; set; }
+        public required string Country { get; set; }
         public required string City { get; set; }
         public required string Venue { get; set; }
         public string? DeparturePlace { get; set; }

@@ -13,4 +13,5 @@ public class ActivityParams : PaginationParams<DateTime?>
     public decimal? MaxPrice { get; set; }
     public string? DeparturePlace { get; set; }
     public string? Title { get; set; }
+    public string? Duration { get; set; }
 }

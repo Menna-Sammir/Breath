@@ -74,6 +74,22 @@ public class GetActivityList
                 query = query.Where(x => x.Price <= request.Params.MaxPrice.Value);
             }
 
+            if (!string.IsNullOrEmpty(request.Params.Duration))
+            {
+                switch (request.Params.Duration)
+                {
+                    case "1-3 Days":
+                        query = query.Where(x => x.Duration >= 1 && x.Duration <= 3);
+                        break;
+                    case "3-5 Days":
+                        query = query.Where(x => x.Duration > 3 && x.Duration <= 5);
+                        break;
+                    case "5+ Days":
+                        query = query.Where(x => x.Duration > 5);
+                        break;
+                }
+            }
+
             if (!string.IsNullOrEmpty(request.Params.DeparturePlace))
             {
                 query = query.Where(x =>
