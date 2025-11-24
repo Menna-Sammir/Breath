@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Persistence;
 using Resend;
 
@@ -80,7 +81,7 @@ app.UseCors(x =>
     x.AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "https://localhost:3000")
+        .WithOrigins("https://*.railway.app", "http://localhost:3000", "https://localhost:3000")
 );
 
 app.UseAuthentication();
