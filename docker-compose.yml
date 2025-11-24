@@ -20,10 +20,7 @@ WORKDIR /src
 
 COPY . .
 
-#
-WORKDIR /src/ClientApp
-RUN npm install
-RUN npm run build
+
 
 # 
 WORKDIR /src
