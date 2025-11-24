@@ -4,7 +4,7 @@ import agent from "../api/agent";
 import { useNavigate } from "react-router";
 import type { RegisterSchema } from "../schemas/registerSchema";
 import { toast } from "react-toastify";
-// import { ChangePasswordSchema } from "../schemas/changePasswordSchema";
+import type { ChangePasswordSchema } from "../schemas/changePasswordSchema";
 
 export const useAccount = () => {
   const queryClient = useQueryClient();
@@ -61,7 +61,12 @@ export const useAccount = () => {
       email?: string;
       userId?: string | null;
     }) => {
-      alert("resendConfirmationEmail called with email: " + email + " and userId: " + userId);
+      alert(
+        "resendConfirmationEmail called with email: " +
+          email +
+          " and userId: " +
+          userId
+      );
       await agent.get(`/account/resendConfirmEmail`, {
         params: {
           email,
@@ -74,14 +79,14 @@ export const useAccount = () => {
     },
     onError: () => {
       toast.error("Problem sending email - please check email address");
-    }
+    },
   });
 
-  // const changePassword = useMutation({
-  //   mutationFn: async (data: ChangePasswordSchema) => {
-  //     await agent.post("/account/change-password", data);
-  //   },
-  // });
+  const changePassword = useMutation({
+    mutationFn: async (data: ChangePasswordSchema) => {
+      await agent.post("/account/change-password", data);
+    },
+  });
 
   const forgotPassword = useMutation({
     mutationFn: async (email: string) => {
@@ -114,7 +119,7 @@ export const useAccount = () => {
     registerUser,
     verifyEmail,
     resendConfirmationEmail,
-    // changePassword,
+    changePassword,
     forgotPassword,
     resetPassword,
     fetchGithubToken,

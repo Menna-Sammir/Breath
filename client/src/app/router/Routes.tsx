@@ -12,6 +12,9 @@ import ProfilePage from "../../features/profiles/ProfilePage";
 import VerifyEmail from "../../features/account/VerifyEmail";
 import LoginPage from "../../features/account/LoginPage";
 import RegisterPage from "../../features/account/RegisterPage";
+import ChangePasswordPage from "../../features/account/ChangePasswordPage";
+import ForgotPasswordPage from "../../features/account/ForgotPasswordPage";
+import ResetPasswordPage from "../../features/account/ResetPasswordPage";
 
 export const router = createBrowserRouter([
   {
@@ -42,10 +45,21 @@ export const router = createBrowserRouter([
             element: <ActivityForm key="create" />,
           },
           {
+            path: "change-password",
+            element: <ChangePasswordPage />,
+          },
+          {
+            path: "forgot-password",
+            element: <ForgotPasswordPage />,
+          },
+          {
+            path: "reset-password",
+            element: <ResetPasswordPage />,
+          },
+          {
             path: "profiles/:id",
             element: <ProfilePage />,
           },
-
         ],
       },
       {

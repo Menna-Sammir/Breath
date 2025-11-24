@@ -1,61 +1,63 @@
-import { useController, type FieldValues, type UseControllerProps } from "react-hook-form";
+import {
+  type FieldValues,
+  useController,
+  type UseControllerProps,
+  useFormContext,
+} from "react-hook-form";
 
-type Props<T extends FieldValues> = {} & UseControllerProps<T> & {
+type Props<T extends FieldValues> = {
   label?: string;
-  placeholder?: string;
-  type?: string;
-  helperText?: string;
-  multiline?: boolean;
-  rows?: number;
-};
+} & UseControllerProps<T> &
+  React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function TextInput<T extends FieldValues>({
+  control,
   label,
-  placeholder,
-  type,
-  helperText,
-  multiline = false,
-  rows = 1,
   ...props
 }: Props<T>) {
-  const { field, fieldState } = useController({ ...props });
+  const formContext = useFormContext<T>();
+  const effectiveControl = control || formContext?.control;
 
-  const baseClasses = `
-    w-full border rounded-lg p-3 focus:outline-none focus:ring-2
-    ${fieldState.error ? "border-red-500 focus:ring-red-500" : "border-gray-300 focus:ring-blue-500"}
-  `;
+  if (!effectiveControl) {
+    throw new Error(
+      "Text input must be used within a form provider or passed as props"
+    );
+  }
+
+  const { field, fieldState } = useController({
+    ...props,
+    control: effectiveControl,
+  });
 
   return (
-    <div className="flex flex-col">
+    <div className="w-full">
       {label && (
         <label
-          className={`mb-1 font-medium ${fieldState.error ? "text-red-500" : "text-gray-700"}`}
+          htmlFor={props.name}
+          className="mb-1 block text-sm font-medium text-gray-700"
         >
           {label}
         </label>
       )}
 
-      {multiline ? (
-        <textarea
-          {...field}
-          placeholder={placeholder}
-          rows={rows}
-          className={baseClasses + " resize-none"}
-        />
-      ) : (
-        <input
-          {...field}
-          placeholder={placeholder}
-          type={type}
-          className={baseClasses}
-        />
-      )}
+      <input
+        {...props}
+        {...field}
+        id={props.name}
+        value={field.value || ""}
+        className={`
+          w-full rounded-lg border p-2 outline-none transition
+          ${
+            fieldState.error
+              ? "border-red-500 focus:border-red-600"
+              : "border-gray-300 focus:border-blue-500"
+          }
+        `}
+      />
 
-      {fieldState.error ? (
-        <p className="text-red-500 text-sm mt-1">{fieldState.error.message}</p>
-      ) : helperText ? (
-        <p className="text-gray-500 text-sm mt-1">{helperText}</p>
-      ) : null}
+      {fieldState.error?.message && (
+        <p className="mt-1 text-sm text-red-600">{fieldState.error.message}</p>
+      )}
     </div>
   );
 }
