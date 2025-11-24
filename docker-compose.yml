@@ -12,13 +12,17 @@
 # volumes:
 #   sql_data:
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0
-WORKDIR /app
 
-COPY ./out .
+version: "3.9"
 
-RUN chmod +x API.dll
-
-ENTRYPOINT ["dotnet", "API.dll"]
-
-
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:80"
+    volumes:
+      - ./out:/app
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
