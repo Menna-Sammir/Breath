@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 using API.DTOs;
 using Domain;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using static API.DTOs.GithubInfo;
 
 namespace API.Controllers;
 
@@ -15,6 +17,89 @@ public class AccountController(
     IConfiguration config
 ) : BaseAPIController
 {
+    [AllowAnonymous]
+    [HttpPost("github-login")]
+    public async Task<ActionResult> LoginWithGitHub(string code)
+    {
+        if (string.IsNullOrEmpty(code))
+        {
+            return BadRequest("GitHub code is required.");
+        }
+        using var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Accept.Add(
+            new MediaTypeWithQualityHeaderValue("application/json")
+        );
+        var tokenResponse = await httpClient.PostAsJsonAsync(
+            "https://github.com/login/oauth/access_token",
+            new GithubAuthRequest
+            {
+                Code = code,
+                ClientId = config["Authentication:Github:GitHubClientId"]!,
+                ClientSecret = config["Authentication:Github:GitHubClientSecret"]!,
+                RedirectUri = $"{config["ClientAppUrl"]}/auth-callback",
+            }
+        );
+        if (!tokenResponse.IsSuccessStatusCode)
+        {
+            return BadRequest("Error retrieving GitHub access token.");
+        }
+        var tokenContent = await tokenResponse.Content.ReadFromJsonAsync<GitHubTokenResponse>();
+        if (tokenContent == null || string.IsNullOrEmpty(tokenContent?.AccessToken))
+        {
+            return BadRequest("Invalid GitHub access token response.");
+        }
+
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+            "Bearer",
+            tokenContent.AccessToken
+        );
+        httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Breath"));
+
+        var userResponse = await httpClient.GetAsync("https://api.github.com/user");
+        if (!userResponse.IsSuccessStatusCode)
+        {
+            return BadRequest("Error retrieving GitHub user information.");
+        }
+
+        var user = await userResponse.Content.ReadFromJsonAsync<GitHubUser>();
+        if (string.IsNullOrEmpty(user?.Email))
+        {
+            var emailsResponse = await httpClient.GetAsync("https://api.github.com/user/emails");
+            if (emailsResponse.IsSuccessStatusCode)
+            {
+                var emails = await emailsResponse.Content.ReadFromJsonAsync<List<GitHubEmail>>();
+                var primary = emails?.FirstOrDefault(e => e.Primary && e.Verified)?.Email;
+                if (string.IsNullOrEmpty(primary))
+                {
+                    return BadRequest("No verified primary email found for GitHub user.");
+                }
+                user!.Email = primary;
+            }
+        }
+
+        var existingUser = await signInManager.UserManager.Users.FirstOrDefaultAsync(u =>
+            u.Email == user!.Email
+        );
+        if (existingUser == null)
+        {
+            existingUser = new User
+            {
+                UserName = user!.Email,
+                Email = user.Email,
+                DisplayName = user.Name,
+                ImageUrl = user.ImageUrl,
+            };
+            var createResult = await signInManager.UserManager.CreateAsync(existingUser);
+            if (!createResult.Succeeded)
+            {
+                return BadRequest("Error creating user account.");
+            }
+            await signInManager.SignInAsync(existingUser, isPersistent: false);
+        }
+
+        return Ok();
+    }
+
     [AllowAnonymous]
     [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
