@@ -1,13 +1,26 @@
-services:
-  sql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      MSSQL_SA_PASSWORD: "Password@1"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
-    volumes:
-      - sql_data:/var/opt/mssql
-    platform: linux/amd64
-volumes:
-  sql_data:
+# services:
+#   sql:
+#     image: mcr.microsoft.com/mssql/server:2022-latest
+#     environment:
+#       MSSQL_SA_PASSWORD: "Password@1"
+#       ACCEPT_EULA: "Y"
+#     ports:
+#       - "1433:1433"
+#     volumes:
+#       - sql_data:/var/opt/mssql
+#     platform: linux/amd64
+# volumes:
+#   sql_data:
+
+# Stage 1: build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/out
+
+# Stage 2: runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+COPY --from=build /app/out .
+ENTRYPOINT ["dotnet", "Breath.dll"]
