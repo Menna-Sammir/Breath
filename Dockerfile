@@ -5,4 +5,6 @@ COPY ./out .
 
 RUN chmod +x API.dll
 
+EXPOSE 80
+
 ENTRYPOINT ["dotnet", "API.dll"]
