@@ -27,7 +27,7 @@ builder.Services.AddControllers(opt =>
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     // opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddCors();
 builder.Services.AddSignalR();
