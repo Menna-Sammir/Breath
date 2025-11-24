@@ -66,7 +66,6 @@ public class AccountController(
 
     private async Task SendConfirmationEmailAsync(User user, string email)
     {
-
         var code = await signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var confirmationLink =
@@ -111,4 +110,34 @@ public class AccountController(
         await signInManager.SignOutAsync();
         return Ok();
     }
+
+    [HttpPost("change-password")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+    {
+        var user = await signInManager.UserManager.GetUserAsync(User);
+        if (user == null)
+            return Unauthorized();
+
+        var result = await signInManager.UserManager.ChangePasswordAsync(
+            user,
+            changePasswordDto.CurrentPassword,
+            changePasswordDto.NewPassword
+        );
+
+        if (result.Succeeded)
+        {
+            return Ok(new { message = "Password changed successfully." });
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("changePasswordError", error.Description);
+            }
+            return ValidationProblem();
+        }
+    }
+
+    
 }
