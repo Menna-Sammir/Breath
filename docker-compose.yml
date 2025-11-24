@@ -11,17 +11,41 @@
 #     platform: linux/amd64
 # volumes:
 #   sql_data:
-
+# =========================
 # Stage 1: Build
+# =========================
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
+
+
 COPY . .
+
+#
+WORKDIR /src/ClientApp
+RUN npm install
+RUN npm run build
+
+# 
+WORKDIR /src
+
+# Build الـ .NET
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/out
 
+# Debug:
+RUN ls -la /app/out
+
+# =========================
 # Stage 2: Runtime
+# =========================
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
-COPY --from=build /app/out .
-ENTRYPOINT ["dotnet", "API.dll"]
 
+#
+COPY --from=build /app/out .
+
+#
+RUN chmod +x /app/API.dll
+
+# ENTRYPOINT 
+ENTRYPOINT ["dotnet", "API.dll"]
