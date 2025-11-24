@@ -138,6 +138,4 @@ public class AccountController(
             return ValidationProblem();
         }
     }
-
-    
 }

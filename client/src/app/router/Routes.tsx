@@ -15,6 +15,7 @@ import RegisterPage from "../../features/account/RegisterPage";
 import ChangePasswordPage from "../../features/account/ChangePasswordPage";
 import ForgotPasswordPage from "../../features/account/ForgotPasswordPage";
 import ResetPasswordPage from "../../features/account/ResetPasswordPage";
+import AuthCallback from "../../features/account/AuthCallback";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ export const router = createBrowserRouter([
           {
             path: "reset-password",
             element: <ResetPasswordPage />,
+          },
+          {
+            path: "auth-callback",
+            element: <AuthCallback />,
           },
           {
             path: "profiles/:id",

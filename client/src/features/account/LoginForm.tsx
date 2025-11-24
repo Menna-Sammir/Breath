@@ -6,6 +6,7 @@ import TextInput from "../../app/shared/components/TextInput";
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { Github } from "lucide-react";
 
 export default function LoginForm() {
   const [notVerified, setNotVerified] = useState(false);
@@ -38,17 +39,17 @@ export default function LoginForm() {
       onSuccess: () => {
         navigate(location.state?.from || "/activities");
       },
-      onError: (error) => {
+      onError: () => {
         setNotVerified(true);
       },
     });
   };
 
-  // const loginWithGithub = () => {
-  //   const clientId = import.meta.env.VITE_GIHUB_CLIENT_ID;
-  //   const redirectUrl = import.meta.env.VITE_REDIRECT_URL;
-  //   window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirectUri=${redirectUrl}&scope=read:user user:email`;
-  // };
+  const loginWithGithub = () => {
+    const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
+    const redirectUrl = import.meta.env.VITE_REDIRECT_URI;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirectUri=${redirectUrl}&scope=read:user user:email`;
+  };
 
   return (
     <>
@@ -83,16 +84,13 @@ export default function LoginForm() {
           >
             Login
           </button>
-          {/* <Button
-        onClick={loginWithGithub}
-        startIcon={<GitHub />}
-        sx={{ backgroundColor: "black" }}
-        type="button"
-        variant="contained"
-        size="large"
-      >
-        Login with Github
-      </Button> */}
+          <button
+            onClick={loginWithGithub}
+            type="button"
+            className="w-full rounded-lg py-3 px-4 text-white bg-black hover:bg-gray-800"
+          >
+            <Github className="inline mr-2 mb-1" /> Continue with GitHub
+          </button>
           {notVerified ? (
             <div className="flex flex-col items-center text-center mt-2">
               <p className="text-sm text-red-600">
