@@ -7,12 +7,16 @@ import {
 
 type Props<T extends FieldValues> = {
   label?: string;
+  multiline?: boolean;
+  rows?: number;
 } & UseControllerProps<T> &
-  React.InputHTMLAttributes<HTMLInputElement>;
+  React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>;
 
 export default function TextInput<T extends FieldValues>({
   control,
   label,
+  multiline,
+  rows,
   ...props
 }: Props<T>) {
   const formContext = useFormContext<T>();
@@ -40,20 +44,38 @@ export default function TextInput<T extends FieldValues>({
         </label>
       )}
 
-      <input
-        {...props}
-        {...field}
-        id={props.name}
-        value={field.value || ""}
-        className={`
-          w-full rounded-lg border p-2 outline-none transition
-          ${
-            fieldState.error
-              ? "border-red-500 focus:border-red-600"
-              : "border-gray-300 focus:border-blue-500"
-          }
-        `}
-      />
+      {multiline ? (
+        <textarea
+          {...props}
+          {...field}
+          rows={rows}
+          id={props.name}
+          value={field.value || ""}
+          className={`
+            w-full rounded-lg border p-2 outline-none transition
+            ${
+              fieldState.error
+                ? "border-red-500 focus:border-red-600"
+                : "border-gray-300 focus:border-blue-500"
+            }
+          `}
+        />
+      ) : (
+        <input
+          {...props}
+          {...field}
+          id={props.name}
+          value={field.value || ""}
+          className={`
+            w-full rounded-lg border p-2 outline-none transition
+            ${
+              fieldState.error
+                ? "border-red-500 focus:border-red-600"
+                : "border-gray-300 focus:border-blue-500"
+            }
+          `}
+        />
+      )}
 
       {fieldState.error?.message && (
         <p className="mt-1 text-sm text-red-600">{fieldState.error.message}</p>

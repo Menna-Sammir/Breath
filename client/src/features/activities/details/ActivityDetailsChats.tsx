@@ -29,7 +29,7 @@ const ActivityDetailsChat = observer(function ActivityDetailsChat() {
     }
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       handleSubmit(addComment)();

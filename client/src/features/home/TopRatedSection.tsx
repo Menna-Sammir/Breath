@@ -1,4 +1,3 @@
-import React from "react";
 import PackageCard from "./PackageCard";
 import { packages1, packages2, packages3 } from "../../assets/images";
 

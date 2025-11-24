@@ -17,7 +17,7 @@ export default function RegisterSuccess({email}: Props) {
             <p className="text-lg mb-4">Please check your email to confirm your account</p>
             <button
                 className="w-full max-w-sm bg-indigo-600 text-white px-4 py-2 rounded"
-                onClick={() => resendConfirmationEmail.mutate(email)}
+                onClick={() => resendConfirmationEmail.mutate({ email })}
             >
                 Re-send confirmation email
             </button>

@@ -3,7 +3,6 @@ import { useState } from "react";
 import PhotoUploadWidget from "../../../app/shared/components/PhotoUploadWidget";
 import DeleteButton from "../../../app/shared/components/DeleteButton";
 import { useActivities } from "../../../lib/hooks/useActivities";
-import ImageButton from "../../../app/shared/components/imageButton";
 import StarButton from "../../../app/shared/components/StarButton";
 
 export default function ActivityPhotos() {

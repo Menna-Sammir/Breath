@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { Link } from "react-router";
 import { useStore } from "../../lib/hooks/useStore";
 import UserMenu from "./UserMenu";
 import { useAccount } from "../../lib/hooks/useAccounts";

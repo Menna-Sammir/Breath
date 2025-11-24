@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router";
 import { footerBanner } from "../../assets/images";
 import { MoveUpRight } from "lucide-react";

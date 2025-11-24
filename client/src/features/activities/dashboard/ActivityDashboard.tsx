@@ -10,7 +10,7 @@ export default function ActivityDashboard() {
   const [searchParams] = useSearchParams();
   const { activityStore } = useStore();
 
-  const [filters, setFilters] = useState({
+  const [, setFilters] = useState({
     destination: "",
     priceRange: [0, 5000],
     duration: "",

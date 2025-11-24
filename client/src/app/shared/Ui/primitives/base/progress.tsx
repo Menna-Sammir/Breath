@@ -1,21 +1,18 @@
-'use client';
-
-import * as React from 'react';
-import { Progress as ProgressPrimitives } from '@base-ui-components/react/progress';
-import { motion } from 'motion/react';
+import { Progress as ProgressPrimitives } from "@base-ui-components/react/progress";
+import { motion } from "motion/react";
 
 import {
   CountingNumber,
   type CountingNumberProps,
-} from '../../primitives/texts/counting-number';
-import { getStrictContext } from '@/lib/get-strict-context';
+} from "../../primitives/texts/counting-number";
+import { getStrictContext } from "../../../../../lib/get-strict-context";
 
 type ProgressContextType = {
   value: number;
 };
 
 const [ProgressProvider, useProgress] =
-  getStrictContext<ProgressContextType>('ProgressContext');
+  getStrictContext<ProgressContextType>("ProgressContext");
 
 type ProgressProps = React.ComponentProps<typeof ProgressPrimitives.Root>;
 
@@ -34,7 +31,7 @@ type ProgressIndicatorProps = React.ComponentProps<
 const MotionProgressIndicator = motion.create(ProgressPrimitives.Indicator);
 
 function ProgressIndicator({
-  transition = { type: 'spring', stiffness: 100, damping: 30 },
+  transition = { type: "spring", stiffness: 100, damping: 30 },
   ...props
 }: ProgressIndicatorProps) {
   const { value } = useProgress();
@@ -63,9 +60,9 @@ function ProgressLabel(props: ProgressLabelProps) {
 
 type ProgressValueProps = Omit<
   React.ComponentProps<typeof ProgressPrimitives.Value>,
-  'render'
+  "render"
 > &
-  Omit<CountingNumberProps, 'number'>;
+  Omit<CountingNumberProps, "number">;
 
 function ProgressValue({
   transition = { stiffness: 80, damping: 20 },
@@ -93,6 +90,7 @@ export {
   ProgressTrack,
   ProgressLabel,
   ProgressValue,
+  // eslint-disable-next-line react-refresh/only-export-components
   useProgress,
   type ProgressProps,
   type ProgressIndicatorProps,

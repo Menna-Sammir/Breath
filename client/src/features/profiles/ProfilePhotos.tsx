@@ -47,7 +47,7 @@ export default function ProfilePhotos() {
       <hr className="my-2" />
 
       {editMode ? (
-        <PhotoUploadWidget uploadPhoto={handlePhotoUpload} loading={uploadPhoto.isPending} size={300} />
+        <PhotoUploadWidget uploadPhoto={handlePhotoUpload} loading={uploadPhoto.isPending} />
       ) : (
         <>
           {photos.length === 0 ? (

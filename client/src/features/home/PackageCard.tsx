@@ -2,10 +2,22 @@ import { Check, Heart, MoveUpRight, Star } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 
+type PackageCardProps = {
+  image: string;
+  tag: string;
+  tagColor?: string;
+  title: string;
+  rating?: number | string;
+  price: number | string;
+  duration: string;
+  features: string[];
+  badge?: string;
+  badgeColor?: string;
+};
+
 const PackageCard = ({
   image,
   tag,
-  tagColor,
   title,
   rating,
   price,
@@ -13,7 +25,7 @@ const PackageCard = ({
   features,
   badge,
   badgeColor,
-}) => {
+}: PackageCardProps) => {
   const [liked, setLiked] = useState(false);
 
   return (

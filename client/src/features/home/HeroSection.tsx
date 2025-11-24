@@ -139,7 +139,7 @@ const HeroSection = () => {
                   x-ref="picker"
                   id="picker"
                   x-model="value"
-                  value={date}
+                  value={date ?? undefined}
                   onChange={(selectedDates) =>
                     setDate(selectedDates[0] || null)
                   }

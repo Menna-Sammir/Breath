@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 import ProfileCard from "../../../features/profiles/ProfileCard";
@@ -47,6 +46,7 @@ export default function AvatarPopover({ profile }: Props) {
         <div
           id="profile-popover"
           role="dialog"
+          aria-label={`Profile details ${profile.displayName ?? profile.id}`}
           className="absolute left-0 top-full mt-2 z-50 pointer-events-auto"
           onMouseEnter={handlePopoverOpen}
           onMouseLeave={handlePopoverClose}
