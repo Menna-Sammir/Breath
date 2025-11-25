@@ -34,7 +34,7 @@ export default function ActivityCard({ activity }: Props) {
         ></Link>
 
         <img
-          src={`/images/categoryImages/${activity.category}.jpg`}
+          src={activity.eventPhotoUrl || `/images/categoryImages/${activity.category}.jpg`}
           alt="Host"
           className="h-full w-full object-cover duration-300 group-hover:scale-105"
         />

@@ -67,8 +67,7 @@ public class DbInitializer
 
                 Attendees =
                 {
-                    new() { UserId = users[10].Id, IsHost = true },
-                    new() { UserId = users[11].Id, IsHost = false },
+                    new() { UserId = users[1].Id, IsHost = true },
                 },
             },
             new()
@@ -86,12 +85,6 @@ public class DbInitializer
                 Latitude = 25.5820,
                 Longitude = 55.5470,
                 DeparturePlace = "Dubai International Airport",
-
-                Attendees =
-                {
-                    new() { UserId = users[12].Id, IsHost = true },
-                    new() { UserId = users[13].Id, IsHost = false },
-                },
             },
             new()
             {
@@ -108,12 +101,6 @@ public class DbInitializer
                 Latitude = 30.2000,
                 Longitude = 31.3000,
                 DeparturePlace = "Cairo International Airport",
-
-                Attendees =
-                {
-                    new() { UserId = users[14].Id, IsHost = true },
-                    new() { UserId = users[15].Id, IsHost = false },
-                },
             },
             new()
             {
@@ -130,11 +117,6 @@ public class DbInitializer
                 Latitude = 41.7758,
                 Longitude = 13.0986,
                 DeparturePlace = "Rome Fiumicino Airport",
-                Attendees =
-                {
-                    new() { UserId = users[16].Id, IsHost = true },
-                    new() { UserId = users[17].Id, IsHost = false },
-                },
             },
             new()
             {
@@ -151,12 +133,6 @@ public class DbInitializer
                 Latitude = 48.0000,
                 Longitude = 10.5000,
                 DeparturePlace = "Munich Airport",
-
-                Attendees =
-                {
-                    new() { UserId = users[18].Id, IsHost = true },
-                    new() { UserId = users[19].Id, IsHost = false },
-                },
             },
             new()
             {
@@ -173,12 +149,6 @@ public class DbInitializer
                 Latitude = 47.7455,
                 Longitude = 11.7314,
                 DeparturePlace = "Munich Airport",
-
-                Attendees =
-                {
-                    new() { UserId = users[20].Id, IsHost = true },
-                    new() { UserId = users[21].Id, IsHost = false },
-                },
             },
             new()
             {
@@ -195,12 +165,6 @@ public class DbInitializer
                 Latitude = 50.2000,
                 Longitude = 10.1500,
                 DeparturePlace = "Frankfurt Airport",
-
-                Attendees =
-                {
-                    new() { UserId = users[22].Id, IsHost = true },
-                    new() { UserId = users[23].Id, IsHost = false },
-                },
             },
         };
 

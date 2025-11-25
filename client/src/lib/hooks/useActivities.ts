@@ -32,7 +32,7 @@ export const useActivities = (id?: string) => {
         {
           params: {
             cursor: pageParam,
-            pageSize: 3,
+            pageSize: 4,
             filter,
             city,
             minPrice,
