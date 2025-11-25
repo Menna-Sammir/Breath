@@ -12,6 +12,12 @@ public class DbInitializer
         {
             new()
             {
+                DisplayName = "Menna",
+                UserName = "menna@test.com",
+                Email = "menna@test.com",
+            },
+            new()
+            {
                 DisplayName = "Bob",
                 UserName = "bob@test.com",
                 Email = "bob@test.com",
@@ -27,12 +33,6 @@ public class DbInitializer
                 DisplayName = "Jane",
                 UserName = "jane@test.com",
                 Email = "jane@test.com",
-            },
-            new()
-            {
-                DisplayName = "Menna",
-                UserName = "menna@test.com",
-                Email = "menna@test.com",
             },
         };
 
@@ -51,184 +51,156 @@ public class DbInitializer
         {
             new()
             {
-                Title = "Past Activity 1",
-                Date = DateTime.Now.AddMonths(-2),
-                Description = "Activity 2 months ago",
-                Category = "drinks",
-                City = "London",
-                Country = "United Kingdom",
-                Duration = 7,
-                Price = 1899m,
-                Venue =
-                    "The Lamb and Flag, 33, Rose Street, Seven Dials, Covent Garden, London, Greater London, England, WC2E 9EB, United Kingdom",
-                Latitude = 51.51171665,
-                Longitude = -0.1256611057818921,
+                Title = "Aswan Healing & Wellness Retreat",
+                Date = DateTime.Now.AddDays(40),
+                Description =
+                    "A restorative retreat in Aswan with traditional Nubian treatments, massages, and wellness diagnostics at MGM Wellness Clinic.",
+                Category = "medical",
+                City = "Aswan",
+                Country = "Egypt",
+                Duration = 6,
+                Price = 1800m,
+                Venue = "MGM Wellness Clinic, Aswan, Egypt",
+                Latitude = 24.0889,
+                Longitude = 32.8992,
+                DeparturePlace = "Aswan International Airport",
+
                 Attendees =
-                [
-                    new() { UserId = users[0].Id, IsHost = true },
-                    new() { UserId = users[1].Id, IsHost = false },
-                ],
+                {
+                    new() { UserId = users[10].Id, IsHost = true },
+                    new() { UserId = users[11].Id, IsHost = false },
+                },
             },
             new()
             {
-                Title = "Past Activity 2",
-                Date = DateTime.Now.AddMonths(-1),
-                Description = "Activity 1 month ago",
-                Category = "culture",
-                City = "Paris",
-                Country = "France",
+                Title = "Zulal Serenity Wellness Retreat",
+                Date = DateTime.Now.AddDays(50),
+                Description =
+                    "A scientifically supported wellness and rehab program at Zulal Serenity resort, combining physical therapy, nutrition, and holistic healing.",
+                Category = "wellness",
+                City = "Umm Al Quwain",
+                Country = "United Arab Emirates",
                 Duration = 7,
-                Price = 1899m,
-                Venue =
-                    "Louvre Museum, Rue Saint-Honoré, Quartier du Palais Royal, 1st Arrondissement, Paris, Ile-de-France, Metropolitan France, 75001, France",
-                Latitude = 48.8611473,
-                Longitude = 2.33802768704666,
+                Price = 4000m,
+                Venue = "Zulal Serenity Retreat, Umm Al Quwain, UAE",
+                Latitude = 25.5820,
+                Longitude = 55.5470,
+                DeparturePlace = "Dubai International Airport",
+
                 Attendees =
-                [
-                    new() { UserId = users[1].Id, IsHost = true },
-                    new() { UserId = users[2].Id },
-                    new() { UserId = users[0].Id },
-                ],
+                {
+                    new() { UserId = users[12].Id, IsHost = true },
+                    new() { UserId = users[13].Id, IsHost = false },
+                },
             },
             new()
             {
-                Title = "Future Activity 1",
-                Date = DateTime.Now.AddMonths(1),
-                Description = "Activity 1 month in future",
-                Category = "culture",
-                Duration = 7,
-                Price = 1899m,
-                City = "London",
-                Country = "United Kingdom",
-                Venue = "Natural History Museum",
-                Latitude = 51.496510900000004,
-                Longitude = -0.17600190725447445,
-                Attendees = [new() { UserId = users[2].Id, IsHost = true }],
-            },
-            new()
-            {
-                Title = "Future Activity 2",
-                Date = DateTime.Now.AddMonths(2),
-                Description = "Activity 2 months in future",
-                Category = "music",
-                Duration = 7,
-                Price = 1899m,
-                City = "London",
-                Country = "United Kingdom",
-                Venue = "The O2",
-                Latitude = 51.502936649999995,
-                Longitude = 0.0032029278126681844,
+                Title = "Tigris Valley Holistic Healing Retreat",
+                Date = DateTime.Now.AddDays(60),
+                Description =
+                    "Natural and holistic healing in Tigris Valley combining Greek medicine, homeopathy, and modern therapies.",
+                Category = "wellness",
+                City = "Tigris Valley",
+                Country = "Egypt",
+                Duration = 5,
+                Price = 1500m,
+                Venue = "Tigris Valley Wellness Center, Egypt",
+                Latitude = 30.2000,
+                Longitude = 31.3000,
+                DeparturePlace = "Cairo International Airport",
+
                 Attendees =
-                [
-                    new() { UserId = users[0].Id, IsHost = true },
-                    new() { UserId = users[2].Id },
-                ],
+                {
+                    new() { UserId = users[14].Id, IsHost = true },
+                    new() { UserId = users[15].Id, IsHost = false },
+                },
             },
             new()
             {
-                Title = "Future Activity 3",
-                Date = DateTime.Now.AddMonths(3),
-                Description = "Activity 3 months in future",
-                Category = "drinks",
-                City = "London",
-                Country = "United Kingdom",
+                Title = "Fiuggi Thermal & Medi Spa Retreat",
+                Date = DateTime.Now.AddDays(70),
+                Description =
+                    "A healing getaway in Fiuggi, Italy, to benefit from its famous thermal waters and modern medical spa treatments.",
+                Category = "medical",
+                City = "Fiuggi",
+                Country = "Italy",
                 Duration = 7,
-                Price = 1899m,
-                Venue = "The Mayflower",
-                Latitude = 51.501778,
-                Longitude = -0.053577,
-                Attendees = [new() { UserId = users[1].Id, IsHost = true }],
-            },
-            new()
-            {
-                Title = "Future Activity 4",
-                Date = DateTime.Now.AddMonths(4),
-                Description = "Activity 4 months in future",
-                Category = "drinks",
-                Duration = 7,
-                Price = 1899m,
-                City = "London",
-                Country = "United Kingdom",
-                Venue = "The Blackfriar",
-                Latitude = 51.512146650000005,
-                Longitude = -0.10364680647106028,
+                Price = 5000m,
+                Venue = "Palazzo Fiuggi, Fiuggi, Italy",
+                Latitude = 41.7758,
+                Longitude = 13.0986,
+                DeparturePlace = "Rome Fiumicino Airport",
                 Attendees =
-                [
-                    new() { UserId = users[2].Id, IsHost = true },
-                    new() { UserId = users[0].Id },
-                ],
+                {
+                    new() { UserId = users[16].Id, IsHost = true },
+                    new() { UserId = users[17].Id, IsHost = false },
+                },
             },
             new()
             {
-                Title = "Future Activity 5",
-                Date = DateTime.Now.AddMonths(5),
-                Description = "Activity 5 months in future",
-                Category = "culture",
-                City = "London",
-                Country = "United Kingdom",
-                Venue =
-                    "Sherlock Holmes Museum, 221b, Baker Street, Marylebone, London, Greater London, England, NW1 6XE, United Kingdom",
-                Duration = 7,
-                Price = 1899m,
-                Latitude = 51.5237629,
-                Longitude = -0.1584743,
-                Attendees = [new() { UserId = users[0].Id, IsHost = true }],
-            },
-            new()
-            {
-                Title = "Future Activity 6",
-                Date = DateTime.Now.AddMonths(6),
-                Description = "Activity 6 months in future",
-                Category = "music",
-                City = "London",
-                Country = "United Kingdom",
-                Duration = 7,
-                Price = 1899m,
-                Venue =
-                    "Roundhouse, Chalk Farm Road, Maitland Park, Chalk Farm, London Borough of Camden, London, Greater London, England, NW1 8EH, United Kingdom",
-                Latitude = 51.5432505,
-                Longitude = -0.15197608174931165,
+                Title = "Bad Wörishofen Hydrotherapy Retreat",
+                Date = DateTime.Now.AddDays(80),
+                Description =
+                    "A therapeutic spa retreat in the famous German spa town of Bad Wörishofen, known for hydrotherapy and Kneipp therapies.",
+                Category = "wellness",
+                City = "Bad Wörishofen",
+                Country = "Germany",
+                Duration = 5,
+                Price = 3000m,
+                Venue = "Therme Bad Wörishofen, Germany",
+                Latitude = 48.0000,
+                Longitude = 10.5000,
+                DeparturePlace = "Munich Airport",
+
                 Attendees =
-                [
-                    new() { UserId = users[1].Id, IsHost = true },
-                    new() { UserId = users[0].Id },
-                ],
+                {
+                    new() { UserId = users[18].Id, IsHost = true },
+                    new() { UserId = users[19].Id, IsHost = false },
+                },
             },
             new()
             {
-                Title = "Future Activity 7",
-                Date = DateTime.Now.AddMonths(7),
-                Description = "Activity 7 months in future",
-                Category = "travel",
-                City = "London",
-                Country = "United Kingdom",
+                Title = "Lanserhof Tegernsee Medi-Detox Retreat",
+                Date = DateTime.Now.AddDays(90),
+                Description =
+                    "A modern medi-detox retreat in the Bavarian Alps combining fasting, genetic testing, and high-tech wellness therapies.",
+                Category = "medical",
+                City = "Tegernsee",
+                Country = "Germany",
                 Duration = 7,
-                Price = 1899m,
-                Venue = "River Thames, England, United Kingdom",
-                DeparturePlace = "Heathrow Airport",
-                Latitude = 51.5575525,
-                Longitude = -0.781404,
+                Price = 7000m,
+                Venue = "Lanserhof Tegernsee, Germany",
+                Latitude = 47.7455,
+                Longitude = 11.7314,
+                DeparturePlace = "Munich Airport",
+
                 Attendees =
-                [
-                    new() { UserId = users[2].Id, IsHost = true },
-                    new() { UserId = users[1].Id },
-                ],
+                {
+                    new() { UserId = users[20].Id, IsHost = true },
+                    new() { UserId = users[21].Id, IsHost = false },
+                },
             },
             new()
             {
-                Title = "Future Activity 8",
-                Date = DateTime.Now.AddMonths(8),
-                Description = "Activity 8 months in future",
-                Category = "film",
-                City = "London",
-                Country = "United Kingdom",
-                Duration = 7,
-                Price = 1899m,
-                Venue = "Odeon Leicester Square",
-                DeparturePlace = "Heathrow Airport",
-                Latitude = 51.5575525,
-                Longitude = -0.781404,
-                Attendees = [new() { UserId = users[0].Id, IsHost = true }],
+                Title = "Historic Spa Retreat in Bad Kissingen",
+                Date = DateTime.Now.AddDays(100),
+                Description =
+                    "Restorative stay in the UNESCO-listed spa town of Bad Kissingen, famous for its mineral springs.",
+                Category = "wellness",
+                City = "Bad Kissingen",
+                Country = "Germany",
+                Duration = 6,
+                Price = 3200m,
+                Venue = "Bad Kissingen Spa Resort, Bad Kissingen, Germany",
+                Latitude = 50.2000,
+                Longitude = 10.1500,
+                DeparturePlace = "Frankfurt Airport",
+
+                Attendees =
+                {
+                    new() { UserId = users[22].Id, IsHost = true },
+                    new() { UserId = users[23].Id, IsHost = false },
+                },
             },
         };
 
